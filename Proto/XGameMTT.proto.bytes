@@ -1,0 +1,329 @@
+syntax = "proto3";
+option cc_generic_services=false;
+package XGameMTT;
+
+// Msg ID
+enum E_MTT_MsgId
+{
+    E_MTT_START_MSG = 0;
+    E_MTT_MSGID_LOGIN_ROOM_CS           = 460;          //登录房间消息请求[CS]
+    E_MTT_MSGID_ROOM_INFO_CS            = 461;          //房间信息
+    E_MTT_MSGID_RANK_INFO_CS            = 462;          //排名信息
+    E_MTT_MSGID_REWARD_INFO_CS          = 463;          //奖励信息
+    E_MTT_MSGID_BLIND_INFO_CS           = 464;          //盲注信息
+    E_MTT_MSGID_TABLE_INFO_CS           = 465;          //桌子信息
+    E_MTT_MSGID_SIGNUP_CS               = 466;          //报名
+    E_MTT_MSGID_GAME_BEGIN_2C           = 467;          //比赛开始通知
+    E_MTT_MSGID_ENTER_CS                = 468;          //进入房间(开赛进房)
+    E_MTT_MSGID_ENTER_2C                = 469;          //进入房间通知
+    E_MTT_MSGID_PROCESS_2C              = 470;          //升盲通知
+    E_MTT_MSGID_REWARD_INFO_2C          = 471;          //奖励通知
+    E_MTT_MSGID_EXIT_ROOM_CS            = 472;          //退出房间
+    E_MTT_MSGID_EXIT_ROOM_2C            = 473;          //退出房间通知（弃用）
+    E_MTT_MSGID_REBUY_CS                = 474;          //重购
+    E_MTT_MSGID_REBUY_TIMEOUT_2C        = 475;          //重购超时通知
+    E_MTT_MSGID_REBUY_2C                = 476;          //重购通知
+    E_MTT_MSGID_DISMISS_TABLE_2C        = 477;          //牌桌解散通知
+    E_MTT_MSGID_DISMISS_ROOM_2C         = 478;          //解散房间通知
+    E_MTT_MSGID_CHANGE_TABLE_CS         = 479;          //切换牌桌(观战玩家)
+    E_MTT_MSGID_CHANGE_TABLE_2C         = 480;          //合并换桌通知(暂时不用)
+    E_MTT_MSGID_FINAL_TABLE_2C          = 481;          //决赛桌通知
+    E_MTT_MSGID_WAIT_TABLE_2C           = 482;          //等待牌桌
+    E_MTT_MSGID_ROOM_CHANGE_2C          = 483;          //房间变更通知
+    E_MTT_MSGID_BOUNTY_REWARD_2C        = 484;          //赏金奖励通知
+    E_MTT_MSGID_BOUNTY_REWARD_INFO_CS   = 485;          //赏金排名
+};
+
+message PropsInfo
+{
+    sint32 iPropsID         = 1;
+    sint32 iPropsCount      = 2;
+    string sPropsIconSmall  = 3;
+    string sPropsIconBig    = 4;
+    string sPropsName       = 5;
+}
+
+//E_MTT_MSGID_LOGIN_ROOM_CS
+message TMTTMsgRespLoginRoom
+{
+    sint32 iResultID                    = 1;            //返回结果: 0.成功，其他失败
+    sint32 iStatue                      = 2;            //玩家状态 3:坐桌等待 5：游戏中 6:离线
+    string sRoomKey                     = 3;            //
+    string iOpType                      = 4;            // 类型（客户端用的）
+}
+
+message CreateRoomOption
+{
+    string sRoomKey                     = 1;            // 房间号
+    string sRoomName                    = 2;            // 牌局名称
+    sint32 iGameType                    = 3;            // 玩法 0 德州  1 短牌  2 奥马哈
+    sint32 iMatchType                   = 4;            // 赛事类型 0:训练赛  1:主赛 2:边赛 3:教学赛 4:内部赛 5:赏金赛 6：退分赛
+    sint32 iTableType                   = 5;            // 牌桌类型 0 单桌赛  1: 多桌赛
+    sint32 iOnlineGame                  = 6;            // 赛场类型 1 线上 0 线下
+    repeated PropsInfo mEntryFee        = 7;            // 报名费
+    sint64 iSeatCount                   = 8;            // 座位数
+    sint32 lBaseScore                   = 9;            // 初始记分牌
+    sint64 lStartTime                   = 10;           // 开赛时间
+    sint64 lEndSignUpTime               = 11;           // 结束报名时间
+    bytes sBlindInfo                    = 12;           // 盲注信息 XGameComm::BlindConf
+    sint32 iRebuyCount                  = 13;           // 重构次数
+    sint64 lBeginSignUpTime             = 14;           // 开始报名时间
+    string sRoomDesc                    = 15;           // 赛事说明
+    sint32 iBountyRatio                 = 16;           //赏金比例
+    string sExchangeRatio               = 17;           //退分比例
+}
+
+//E_MTT_MSGID_CREATE_ROOM_CS
+message TMTTMsgCSCreateRoom
+{
+    sint32 iResultID                    = 1;
+    CreateRoomOption createOption       = 2;  // 房间参数
+}
+
+//E_MTT_MSGID_DISMISS_ROOM_CS
+message TMTTMsgCSDismissRoom
+{
+    sint32 iResultID                    = 1;
+    string sRoomKey                     = 2;
+}
+
+//E_MTT_MSGID_DISMISS_ROOM_2C
+message TMTTMsgCSDismissRoomNotify
+{
+    sint32 iDismissType                 = 1;//解散类型 0:重启解散 1：比赛结束  2：超时解散 3:后台关闭
+    string sRoomKey                     = 2;
+}
+
+enum E_Player_State
+{
+    E_PLAYER_NONE       = 0;  //无状态
+    E_PLAYER_SIGNUP     = 1;  //已报名
+    E_PLAYER_PLAYING    = 2;  //游戏中
+    E_PLAYER_KNOCKOUT   = 3;  //已淘汰
+}
+
+enum E_Room_State
+{
+    E_ROOM_NONE          = 0;//等待报名
+    E_ROOM_SIGNUP        = 1;//报名
+    E_ROOM_WAIT          = 2;//休息等待
+    E_ROOM_DOING         = 3;//已经开赛
+    E_ROOM_FINAL         = 4;//决赛中
+    E_ROOM_END           = 5;//结束
+}
+
+message PlayerInfo
+{
+    sint64          lPlayerID               = 1;            //玩家ID
+    sint32          iTableID                = 2;            //桌子ID
+    sint32          iChairID                = 3;            //所在桌子位置
+    string          sNickName               = 4;            //玩家昵称
+    string          sHeadStr                = 5;            //头像路径
+    E_Player_State  eStatue                 = 6;            //玩家状态
+    sint64          iTakenin                = 7;            //玩家当前筹码
+    sint32          iRank                   = 8;            //排名
+    sint32          iRebuyCount             = 9;            //重购次数
+    repeated PropsInfo  mEntryFee           = 10;           //报名费(重购)
+    repeated PropsInfo  mRewardInfo         = 11;           //奖励
+    int32           areaID                  = 12;           //所属区域ID
+    sint64          lBuyNum                 = 13;           //买入数
+    sint64          lBountyRewardNum        = 14;           //赏金数
+    sint32          iKoPlayerCount          = 15;           //淘汰人数
+}
+
+message RoomInfo
+{
+    string sRoomKey                      = 1;// 房间号
+    sint32 iCurPlayerCount               = 2;// 当前人数
+    sint32 iTotalPlayerCount             = 3;// 当前人数
+    E_Room_State iGameState              = 4;// 赛事状态
+    bytes sCurBlindInfo                  = 5;// 当前盲注信息 XGameComm::BlindConf
+    bytes sNextBlindInfo                 = 6;// next盲注信息 XGameComm::BlindConf
+    sint64 lTatalScore                   = 7;// 总记分牌
+    sint64 lAverScore                    = 8;// 平均记分牌
+    sint32 iRewardPlayerCount            = 9;// 奖励人数
+    sint32 iEndSignLevel                 = 10;// 结束报名等级
+    bool bFinalTable                     = 11;// 是否结算桌
+    sint32 iRemainRaiseRime              = 12;// 剩余升盲时间
+    sint64 lBountyRewardNum              = 13;// 赏金数
+}
+
+//E_MTT_MSGID_ROOM_INFO_CS
+message TMTTMsgCSRoomInfo
+{
+    sint32 iResultID                     = 1;
+    string sRoomKey                      = 2;// 房间号
+    RoomInfo mRoomInfo                   = 3;
+    CreateRoomOption createOption        = 4;// 创房参数
+}
+
+//E_MTT_MSGID_TABLE_INFO_CS
+message TMTTMsgCSTableInfo
+{
+    sint32 iResultID                     = 1;
+    string sRoomKey                      = 2;// 房间号
+    sint32 iPage                         = 3;
+    sint32 iTotalPage                    = 4;
+    map<sint32, int32> mTableInfo        = 5;// 桌子信息 iTableID : Count
+}
+
+//E_MTT_MSGID_BLIND_INFO_CS
+message TMTTMsgCSBlindInfo
+{
+    sint32 iResultID                     = 1;
+    string sRoomKey                      = 2;// 房间号
+    sint32 iPage                         = 3;
+    sint32 iTotalPage                    = 4;
+    bytes sBlindInfo                     = 5;//XGameComm::BlindConf
+}
+
+//E_MTT_MSGID_RANK_INFO_CS
+message TMTTMsgCSRankInfo
+{
+    sint32 iResultID                     = 1;
+    string sRoomKey                      = 2;// 房间号
+    sint32 iPage                         = 3;
+    sint32 iTotalPage                    = 4;
+    map<int32, PlayerInfo> mPlayerInfo   = 5;// 排名信息 rank: info
+    sint32 iMemberType                   = 6;// 0 运动员  1 裁判
+}
+
+//E_MTT_MSGID_REWARD_INFO_CS
+message TMTTMsgCSRewardInfo
+{
+    message RewardInfo
+    {
+        repeated PropsInfo infos         = 1;
+    }
+    sint32 iResultID                     = 1;
+    string sRoomKey                      = 2;// 房间号
+    sint32 iPage                         = 3;
+    sint32 iTotalPage                    = 4;
+    map<int32, RewardInfo> mRewardInfo   = 5;// 奖励信息 rank：info
+}
+
+//E_MTT_MSGID_SIGNUP_CS
+message TMTTMsgCSSignUp
+{
+    sint32 iResultID                     = 1;            //返回结果: 0.成功，其他失败
+    sint32 iActionType                   = 2;            //操作类型 0：取消 1：报名
+    string sRoomKey                      = 3;            //当前房间key
+    RoomInfo mRoomInfo                   = 4;            //报名的房间信息
+}
+
+//E_MTT_MSGID_GAME_BEGIN_2C
+message TMTTMsgGameBeginNotify
+{
+    sint32 iResultID                    = 1;
+    string sRoomKey                     = 2; //
+    sint64 lRemainTime                  = 3;//剩余开赛时间
+    string sRoomID                      = 4;
+    CreateRoomOption createOption       = 5;// 开房信息
+}
+
+//E_MTT_MSGID_ENTER_CS
+//E_MTT_MSGID_ENTER_2C
+message TMTTMsgEnterRoom
+{
+    int32 iResultID                     = 1;
+    string sRoomKey                     = 2;
+    sint32 iTableIndex                  = 3;
+    RoomInfo mRoomInfo                  = 4;
+    repeated PlayerInfo mPlayerInfo     = 5;
+    CreateRoomOption createOption       = 6;  // 房间参数
+}
+
+//E_MTT_MSGID_PROCESS_2C
+message TMTTMsgProcessNotify
+{
+    sint32 currentLevel                 = 1;        // 当前盲注级别
+};
+
+//E_MTT_MSGID_REWARD_INFO_2C
+message TMTTMsgRewardInfoNotify
+{
+    int32 iRank                         = 1;            //名次
+    repeated PropsInfo mRewardInfo      = 2;            //奖励信息
+    bool bGameEnd                       = 3;            //比赛是否结束
+}
+
+//E_MTT_MSGID_RANK_LIST_2C
+//E_MTT_MSGID_RANK_LIST_CS
+message TMTTMsgRankList
+{
+    map<sint32, PlayerInfo> mRankInfo   = 1;            //排名信息 rank : info
+}
+
+//E_MTT_MSGID_EXIT_ROOM_CS
+message TMTTMsgExitRoom
+{
+    sint32 iResultID                    = 1;           //返回结果: 0.成功，其他失败
+}
+
+//E_MTT_MSGID_REBUY_CS, E_MTT_MSGID_REBUY_TIMEOUT_2C
+message TMTTMsgCSReBuy
+{
+    sint32 iResultID                = 1;
+    sint32 iActionType              = 2;           // 0 取消 1: 重构
+    PlayerInfo userInfo             = 3;           //
+    string sRoomKey                 = 4;
+}
+
+//E_MTT_MSGID_REBUY_2C
+message TMTTMsgReBuyNotify
+{
+    PlayerInfo userInfo             = 1;            // 重构通知
+    sint32 iOptionTime              = 2;            // 剩余重构时间
+    CreateRoomOption createOption   = 3;            // 房间参数
+}
+
+//E_MTT_MSGID_DISMISS_TABLE_2C
+message TMTTMsgDismissTableNotify
+{
+    sint32 iDisType                 = 1;            //解散类型  0： 并桌， 1：游戏结束
+    CreateRoomOption createOption   = 2;            // 房间参数
+}
+
+//E_MTT_MSGID_CHANGE_TABLE_CS
+//E_MTT_MSGID_CHANGE_TABLE_2C
+message TMTTMsgChangeTable
+{
+    sint32 iResultID                = 1;
+    string sRoomKey                 = 2;
+}
+
+//E_MTT_MSGID_FINAL_TABLE_2C
+message TMTTMsgFinalTableNotify
+{
+    bool bFinalTable                = 1;
+}
+
+//E_MTT_MSGID_WAITTABLE_2C
+message TMTTMsgWaitTableNotify
+{
+    sint32 iType                = 1; // 0，等待合桌， 1: 等待延迟报名结束
+    sint32 lRemainTime          = 2; // 延迟报名剩余时间
+}
+
+//E_MTT_MSGID_ROOM_CHANGE_2C
+message TMTTMsgRoomChangeNotify
+{
+    RoomInfo mRoomInfo = 1;
+}
+
+//E_MTT_MSGID_BOUNTY_REWARD_2C
+message TMTTMsgBountyRewardNotify
+{
+    repeated PropsInfo mBountyRewardInfo = 1;//赏金奖励
+    repeated sint32 iChairID             = 2;//淘汰玩家
+}
+
+//E_MTT_MSGID_BOUNTY_REWARD_INFO_CS
+message TMTTMsgCSBountyRewardInfo
+{
+    sint32 iResultID                     = 1;
+    string sRoomKey                      = 2;// 房间号
+    sint32 iPage                         = 3;
+    sint32 iTotalPage                    = 4;
+    map<sint32, PlayerInfo> mPlayerInfo  = 5;//赏金排名信息 rank : info
+}

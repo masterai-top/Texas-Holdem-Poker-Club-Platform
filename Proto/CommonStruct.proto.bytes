@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+option cc_generic_services = false;
+
+package XGameProto;
+
+enum ActionName
+{
+    ACTION_NAME_DEFAULT = 0;
+    
+    LOGIN_LOGOUT                            = 100;         // 登出
+    LOGIN_DEVICE                            = 101;         // 设备登录
+    LOGIN_USER_ACCOUNT                      = 102;         // 手机账号登录
+    LOGIN_USER_ACCOUNT_REGISTER             = 103;         // 手机账号注册
+    LOGIN_USER_ACCOUNT_RESET_PASSWD         = 104;         // 手机账号重置密码
+    LOGIN_QUICK                             = 105;         // 快速登录
+    LOGIN_USER_ROUNTER                      = 106;         // 获取网关信息
+    LOGIN_VERIFY_CODE                       = 107;         // 验证码校验
+    LOGIN_SEND_PHONE_CODE                   = 108;         // 发送验证码
+    LOGIN_SET_SAFE_PWD                      = 109;         // 设置安全码
+
+
+    LOGIN_LOGOUT_TCP                        = 150;         // 登出
+    LOGIN_USER_PHONE_SEND_CODE_TCP          = 151;         // 用户手机号发送验证码
+    LOGIN_USER_PHONE_VERIFY_CODE_TCP        = 152;         // 用户手机号验证验证码
+    LOGIN_USER_SET_SAFE_PWD_TCP             = 153;         // 用户设置安全码
+    LOGIN_USER_PHONE_WRITE_OFF_TCP          = 154;         // 用户注销账号
+    LOGIN_USER_INIT_FACE_VERIFY_TCP         = 155;         // 实名认证申请
+    LOGIN_USER_DESCRIBE_FACE_VERIFY_TCP     = 156;         // 实名认证结果查询
+    LOGIN_USER_RESET_PWD_TCP                = 157;         // 重置密码
+
+    USER_GET_USER_BASIC                     = 201;         // 获取用户基本信息
+    USER_UPDATE_USER_INFO                   = 203;         // 更新用户
+    USER_LIST_USER_BASIC                    = 204;         // 批量获取用户基本信息
+    USER_MODIFY_USER_SETTING                = 205;         // 更新用户设置
+    USER_LIST_USER_ADDRESS                  = 206;         // 获取用户地址列表
+    USER_ADD_USER_ADDRESS                   = 207;         // 新增地址
+    USER_UPDATE_USER_ADDRESS                = 208;         // 更新地址
+    USER_DELETE_USER_ADDRESS                = 209;         // 删除地址
+    USER_AUTH_SAFEPWD                       = 210;         // 验证安全码
+    USER_LIST_USER_PROPS                    = 211;         // 获取用户卡包
+    USER_UPDATE_USER_REMAKE                 = 212;         // 更新玩家备注
+    USER_SHOW_PROP_INFO                     = 213;         // 查看资格卡信息
+    USER_MARK_PROP_INFO                     = 214;         // 资格卡登记使用
+    USER_LIST_USER_REMARK                   = 215;         // 我的备注列表
+
+    GAME_RECORD_COLLECT_QUERY               = 301;         // 收藏牌谱列表
+    GAME_RECORD_COLLECT_DEL                 = 302;         // 删除收藏牌谱
+    GAME_RECORD_BRIEF_QUERY                 = 303;         // 战绩列表
+    GAME_RECORD_INFO_QUERY                  = 304;         // 牌局信息
+    GAME_RECORD_HONOUR_RANK_QUERY           = 305;         // 荣誉排名
+    GAME_RECORD_USER_HONOUR_QUERY           = 306;         // 个人荣誉
+    GAME_RECORD_CHEAT_QUERY                 = 307;         // 作弊列表
+    GAME_RECORD_CHEAT_GAME_QUERY            = 308;         // 作弊牌局
+    GAME_RECORD_USER_STAT_QUERY             = 309;         // 玩家玩牌数据
+    GAME_RECORD_USER_OWN_QUERY              = 310;         // 我的数据(个人参赛数据统计)
+
+    PUSH_MULTIPLE_LOGIN                     = 401;         // 重复登录
+    PUSH_PROPS_CHANGE                       = 402;         // 道具变更
+    PUSH_SERVER_CHANGE_NOTIFY               = 403;         // 服务器改变通知
+    PUSH_SERVER_UPDATE_NOTIFY               = 404;         // 服务器维护
+    PUSH_GET_USER_STATE                     = 405;         // 获取玩家游戏状态
+    PUSH_ACCOUNT_FORBIDDEN_NOTIFY           = 406;         // 账号冻结通知
+
+    HALL_MATCH_ROOM_LIST                    = 503;        // 房间列表
+
+    ORDRE_PRODUCT_LIST                      = 520;        // 商品查询
+    ORDRE_CREATE_ORDER                      = 521;        // 创建商品订单
+    ORDER_STATE_QUERY                       = 522;        // 订单状态查询
+    ORDER_STATE_NOTIFY                      = 523;        // 订单状态通知
+    ORDER_LIST_QUERY                        = 524;        // 订单流水查询
+    ORDRE_VERIFY_ORDER                      = 525;        // 验证订单
+
+    GLOBAL_SEND_QUEST                       = 601;        // 申诉
+    GLOBAL_QUERY_MESSAGE                    = 602;        // 查询消息
+}
+
+ //玩家金币流水ID
+enum GOLDFLOW
+{
+    GOLDFLOW_ID_ERROR                           = 0;
+
+    GOLDFLOW_ID_ORDER_EXCHANGE                  = 1111;     // 兑换
+    GOLDFLOW_ID_ORDER_PAY                       = 1112;     // 支付
+    GOLDFLOW_ID_ORDER_MAN                       = 1113;     // 人工
+
+    GOLDFLOW_ID_MTT_SIGN                        = 1115;      // mtt报名费(C币)
+    GOLDFLOW_ID_MTT_RANK_REWARD                 = 1116;      // mtt比赛排名奖励(C币)
+    GOLDFLOW_ID_MTT_SIGN_BACK                   = 1117;      // mtt报名费返还(C币)
+    GOLDFLOW_ID_MTT_REBUY                       = 1118;      // mtt重购(C币)
+    GOLDFLOW_ID_MTT_ROBOT                       = 1119;      // 机器人补充
+
+    // 1200 - 1300 属于服务消耗类型，不能修改
+    GOLDFLOW_ID_SERVICE_NONE                   = 1200;       // 服务消耗 enum E_SERVICE_TYPE 1 偷偷牌 2 互动道具
+}
+
+// 服务请求头
+message CommonReqHead
+{
+    ActionName actionName = 1;    // 请求动作名
+    bytes reqBodyBytes    = 2;    // 请求数据体
+}
+
+// 服务应答头
+message CommonRespHead
+{
+    sint32 resultCode     = 1;        // 请求结果码
+    ActionName actionName = 2;        // 请求动作名
+    bytes respBodyBytes   = 3;        // 返回数据体
+}
+
+//推送消息
+enum PushMessageType
+{
+    MESSAGE_TYPE_DEFAULT    = 0;
+    USER_ACCOUNT_CHANGE     = 10000;           // 用户账户变化（即财富）
+    USER_EXIT_ROOM          = 10001;           // 用户退出room
+    USER_EXIT_MATCH         = 10002;           // 用户退出比赛
+    CLUB_USER_STATUS_CHANGE = 10100;           // 用户所在的俱乐部会员类型发生变化(管理员与普通会员)，附带: string类型的俱乐部id
+    CLUB_USER_JOIN          = 10101;           // 用户加入俱乐部，附带: 俱乐部id:用户id
+    CLUB_USER_KICKOUT       = 10102;           // 用户被踢出俱乐部，附带: 俱乐部id
+    CLUB_CONFIG_CHANGE      = 10103;           // 俱乐部配置发生变化，附带: string类型的配置id
+    CLUB_INFO_CHANGE        = 10104;           // 俱乐部基础信息发生变化（名称或公告）, 附带: 俱乐部id
+    CLUB_DISMISS            = 10105;           // 俱乐部被解散，附带: string类型的俱乐部id
+    CLUB_USER_EXIT          = 10106;           // 用户退出俱乐部，附带: 俱乐部id:用户id
+}

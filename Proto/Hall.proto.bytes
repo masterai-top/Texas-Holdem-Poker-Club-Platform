@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+option cc_generic_services=false;
+
+package HallProto;
+
+enum E_MTT_STATUS
+{
+    E_MTT_NONE      = 0;   //等待报名
+    E_MTT_SIGNUP    = 1;   //报名中
+    E_MTT_WAIT      = 2;   //休息等待
+    E_MTT_DOING     = 3;   //比赛中
+    E_MTT_FINAL     = 4;   //决赛中
+    E_MTT_END       = 5;   //结束
+}
+
+message PropsInfo
+{
+    sint32 propsID          = 1;    //道具id
+    sint64 propsCount       = 2;    //道具数量
+    string sPropsIconSmall  = 3;
+    string sPropsIconBig    = 4;
+    string sPropsName       = 5;
+}
+
+message MatchRoomInfo
+{
+    string roomIndex                = 1;       //房间唯一值
+    string icon                     = 2;       //赛事图标
+    string roomKey                  = 3;       //房间号
+    string roomId                   = 4;       //房间服务ID
+    string roomName                 = 5;       //房间名字
+    sint32 gameType                 = 6;       //玩法 0 德州  1 短牌  2 奥马哈
+    sint32 matchType                = 7;       //赛事类型 0:训练赛  1:主赛 2:边赛 3:教学赛 4:内部赛
+    sint32 tableType                = 8;       //牌桌类型 0 单桌赛  1: 多桌赛
+    sint32 onlineGame               = 9;       //赛场类型 1 线上 0 线下
+    sint64 beginTime                = 10;      //开赛时间
+    sint32 curPlayerCount           = 11;      //当前人数
+    sint32 maxPlayerCount           = 12;      //最大报名数
+    sint32 seatNum                  = 13;      //座位数
+    sint64 endSignUpTime            = 14;      //截至报名时间
+    bool bDelaySignUp               = 15;      //受否延迟报名
+    bool bRebuy                     = 16;      //是否rebuy
+    bool bAddon                     = 17;      //是否add-on
+    E_MTT_STATUS gameStatus         = 18;      //游戏状态
+    repeated PropsInfo rewardInfo   = 19;      //奖励信息
+    sint64 createTime               = 20;      //创建时间
+    sint64 beginSignUpTime          = 21;      //开始报名时间
+    sint32 iTag                     = 22;      //推荐标记
+    sint32 iBountyRatio             = 23;      //赏金比例
+    string sExchangeRatio           = 24;      //退分比例
+    repeated PropsInfo signUpFeeInfo= 25;      //报名费
+}
+
+//在线赛事列表 HALL_MATCH_ROOM_LIST
+message MatchRoomListReq
+{
+    sint32 iPage                            = 1;
+    sint32 onlineGame                       = 2;    //
+    repeated E_MTT_STATUS vecGameStatus     = 3;    //状态
+    bool bSelfRoom                          = 4;    //是否自己报名的房间(线下赛事)
+    sint32 iOffsetDay                       = 5;    //偏移天数
+}
+
+message MatchRoomListResp
+{
+    sint32 iResultID                        = 1;
+    repeated MatchRoomInfo roomInfos        = 2;
+    sint32 iCurrPage                        = 3;//当前页
+    sint32 iPageCount                       = 4;//总页数
+    map<sint32, sint32> mapRoomStatus       = 5;//房间状态统计 E_MTT_STATUS:count
+    map<string, sint32> mapDateStatus       = 6;//房间数量统计 date:count
+}

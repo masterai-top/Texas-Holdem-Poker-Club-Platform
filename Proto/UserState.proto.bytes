@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+option cc_generic_services=false;
+
+package UserStateProto;
+
+//在线状态
+enum E_Online_State
+{
+    E_ONLINE_STATE_OFFLINE = 0; //离线
+    E_ONLINE_STATE_ONLINE  = 1; //在线
+}
+
+//获取游戏状态请求
+message GetGameStateReq
+{
+    sint64 uid = 1;//用户ID
+}
+
+//获取游戏状态应答
+message GetGameStateResp
+{
+    sint32 resultCode   = 1;      //结果码
+    string sRoomID      = 2;      //RoomID
+    string sRoomKey     = 3;      //场次
+    sint32 gameType     = 4;      //玩法
+    sint32 matchType    = 5;      //赛事类型
+}
+

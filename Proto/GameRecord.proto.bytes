@@ -1,0 +1,217 @@
+syntax = "proto3";
+
+option cc_generic_services=false;
+
+package GameRecordProto;
+
+//收藏列表 GAME_RECORD_COLLECT_QUERY
+message QueryCollectGameReq
+{
+    sint32 iCurrPage = 1;   // 当前页(1开始 一页10条)
+}
+
+message QueryCollectGameResp
+{
+    sint32 iResultID                     = 1;   // 结果 0 成功
+    sint32 iCurrPage                     = 2;   // 当前页 
+    sint32 iPageCount                    = 3;   // 总页数
+    bytes gameDetail                     = 4;   // 本局牌谱(rsp) Pb.GameDetail
+}
+
+//删除收藏牌谱 GAME_RECORD_COLLECT_DEL
+message DeleteCollectGameReq
+{
+    string sDetailIndex                        = 1;//
+}
+
+message DeleteCollectGameResp
+{
+    sint32 iResultID                           = 1;
+    string sDetailIndex                        = 2;//
+}
+
+//查询牌局概况 GAME_RECORD_BRIEF_QUERY
+message QueryGameBriefReq
+{
+    sint32 iOnlineGame                      = 1;// 线上线下
+    sint32 iCurrPage                        = 2;//
+}
+
+message QueryGameBriefResp
+{
+    sint32 iResultID                        = 1;
+    int32 iOnlineGame                       = 2;
+    repeated bytes briefInfos               = 3;//牌局信息 Pb.GameBriefInfo
+    sint32 iCurrPage                        = 4;//
+    sint32 iPageCount                       = 5;//总页数
+}
+
+//牌局详情 GAME_RECORD_INFO_QUERY
+message QueryGameInfoReq
+{
+    string sRoomIndex                        = 1;//
+    sint32 iCurrPage                         = 2;//
+}
+
+message QueryGameInfoResp
+{
+    sint32 iResultID                         = 1;
+    sint32 iCurrPage                         = 2;//
+    sint32 iPageCount                        = 3;//总页数
+    bytes briefInfos                         = 4;//牌局信息 Pb.GameBriefInfo
+}
+
+message UserInfo
+{
+    sint64 lPlayerID                    = 1;//用户ID
+    string sNickName                    = 2;//玩家昵称
+    string sHeadStr                     = 3;//头像路径
+    sint32 iPlayerGender                = 4;//玩家性别 0-未知 1-男 2-女
+    sint32 iAreaId                      = 5;//地区
+    sint32 iAge                         = 6;//年纪
+    sint32 iWinCount                    = 7;//夺冠次数
+    sint32 iRewardCount                 = 8;//奖励次数
+    sint32 iGameCount                   = 9;//牌局次数
+    sint32 iBetCount                    = 10;//入池次数
+    sint32 iPreRaiseCount               = 11;//翻前加注次数
+    sint32 iBuyCount                    = 12;//买入次数
+    sint64 lRewardNum                   = 13;//奖金数
+    sint32 iBuyNum                      = 14;//买入数
+}
+
+message PropsInfo
+{
+    sint32 iPropsID         = 1;
+    sint32 iPropsCount      = 2;
+    string sPropsIconSmall  = 3;
+    string sPropsIconBig    = 4;
+}
+
+//荣誉排名 GAME_RECORD_HONOUR_RANK_QUERY
+message QueryHonourRankReq
+{
+    sint32 iCurrPage                         = 1;//
+    string sFilter                           = 2;//筛选条件
+    sint32 iOnlineGame                       = 3;//线上线下
+}
+
+message QueryHonourRankResp
+{
+    sint32 iResultID                         = 1;
+    sint32 iCurrPage                         = 2;//
+    sint32 iPageCount                        = 3;//总页数
+    map<sint32, UserInfo> mWinInfo           = 4;// key: rank
+}
+
+//个人荣誉信息 GAME_RECORD_USER_HONOUR_QUERY
+message QueryUserHonourReq
+{
+    sint32 iCurrPage                         = 1;//
+    sint64 lPlayerID                         = 2;
+    sint32 iOnlineGame                       = 3;// 线上线下
+}
+
+message QueryUserHonourResp
+{
+    message MatchInfo
+    {
+        string sMatchName                   = 1;
+        sint64 lBeginTime                   = 2;
+        repeated PropsInfo mRewardInfo      = 3;
+    }
+    sint32 iResultID                         = 1;
+    sint32 iCurrPage                         = 2;//
+    sint32 iPageCount                        = 3;//总页数
+    UserInfo mUserInfo                       = 4;//
+    repeated MatchInfo vecMatchInfo          = 5;
+}
+
+enum E_CHEATE_TYPE
+{
+    E_TYPE_USER      = 0;   //作弊玩家
+    E_TYPE_GAME      = 1;   //作弊牌局
+}
+
+//作弊列表 GAME_RECORD_CHEAT_QUERY
+message QueryCheatReq
+{
+    E_CHEATE_TYPE iCheatType = 1;
+    sint32 iCurrPage         = 2;//
+    string sFilter           = 3;//筛选条件
+}
+
+message QueryCheatResp
+{
+    message CheatInfo
+    {
+        string sCheatId          = 1;//uid or sDetialIndex
+        string sCheatName        = 2;
+        string sCheatIcon        = 3;
+        sint64 lCheatTime        = 4;
+        sint32 iDetailCount      = 5;//牌谱数量
+    }
+    sint32 iResultID                         = 1;
+    sint32 iCurrPage                         = 2;//
+    sint32 iPageCount                        = 3;//总页数
+    E_CHEATE_TYPE iCheatType                 = 4;
+    repeated CheatInfo cheatInfo             = 5;
+}
+
+//作弊牌局详情 GAME_RECORD_CHEAT_GAME_QUERY
+message QueryCheatGameReq
+{
+    E_CHEATE_TYPE iCheatType = 1;
+    string sCheatId          = 2;//uid or sRoomIndex
+    sint32 iCurrPage         = 3;//
+}
+
+message QueryCheatGameResp
+{
+    sint32 iResultID                         = 1;
+    sint32 iCurrPage                         = 2;//
+    sint32 iPageCount                        = 3;//总页数
+    E_CHEATE_TYPE iCheatType                 = 4;
+    bytes gameDetail                         = 5;// 本局牌谱(rsp) Pb.GameDetail
+}
+
+//个人数据统计 GAME_RECORD_USER_STAT_QUERY
+message QueryUserStatReq
+{
+    sint64 lPlayerID                        = 1;
+}
+
+message QueryUserStatResp
+{
+    sint32 iResultID                         = 1;
+    UserInfo mUserInfo                       = 2;//
+}
+
+
+// 我的数据
+message QueryUserOwnReq
+{
+    sint64 lStartTime = 1;   // 开始时间戳
+    sint64 lEndTime   = 2;   // 结束时间戳
+}
+
+message QueryUserOwnResp
+{
+    message OwnInfo
+    {
+        sint64 lStartTime   = 1;   // 开始时间戳
+        string sRoomIndex   = 2;   // 唯一值
+        string sCheatName   = 3;   // 赛事名称
+        sint64 lTotalBuy    = 4;   // 买入
+        sint64 lTotalPlayer = 5;   // 人数
+        sint64 lCheatTime   = 6;   // 赛事时长(秒数)
+        string sReward      = 7;   // 我的奖励
+    }
+    sint32 iResultID       = 1;   // 结果码
+    sint64 lTotalReward    = 2;   // 总奖金
+    sint64 lMaxReward      = 3;   // 最大奖金
+    sint64 lRewardTimes    = 4;   // 进奖钱圈次数
+    sint64 lAverageBuy     = 5;   // 平均买入
+    sint64 lMaxBuy         = 6;   // 最高买入
+    sint64 lMinBuy         = 7;   // 最低买入
+    repeated OwnInfo infos = 8;   // 数据
+}

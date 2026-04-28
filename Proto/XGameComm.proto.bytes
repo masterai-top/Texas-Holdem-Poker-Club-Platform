@@ -1,0 +1,310 @@
+syntax = "proto3";
+
+option cc_generic_services=false;
+
+package XGameComm;
+
+//用户标识
+message TUid
+{
+    sint64 lUid = 1;    //用户id
+    string sToken = 2;  //用户token
+}
+
+// 消息类型
+enum MSGTYPE
+{
+    MSGTYPE_REQUEST  = 0;       //请求消息
+    MSGTYPE_RESPONSE = 1;       //响应消息
+    MSGTYPE_NOTIFY   = 2;       //通知消息
+}
+
+//服务类型
+enum SERVICE_TYPE
+{
+    SERVICE_TYPE_DEFAULT = 0;   // 默认
+    SERVICE_TYPE_LOGIN   = 1;   // 登录服务
+    SERVICE_TYPE_HALL    = 2;   // 大厅服务
+    SERVICE_TYPE_CONFIG  = 3;   // 配置服务
+    SERVICE_TYPE_GLOBAL  = 4;   // 全局服务
+    SERVICE_TYPE_RECORD  = 5;   // 记录服务
+    SERVICE_TYPE_PUSH    = 6;   // 推送服务
+    SERVICE_TYPE_ORDER   = 7;   // 订单服务
+}
+
+// 消息头
+message TMsgHead
+{
+    sint32       nMsgID      = 1; //消息ID
+    MSGTYPE      nMsgType    = 2; //消息类型
+    SERVICE_TYPE serviceType = 3; //服务类型
+}
+
+// 通讯包头
+message TPackage
+{
+    sint32            iVersion      = 1;//客户端版本
+    TUid              stUid         = 2;//用户标识
+    sint32            iGameID       = 3;//游戏ID
+    string            sRoomID       = 4;//RoomID
+    sint32            iRoomServerID = 5;//RoomServerID
+    sint32            iSequence     = 6;//序列号
+    sint32            iFlag         = 7;//标志位
+    repeated TMsgHead vecMsgHead    = 8;//消息头数据
+    repeated bytes    vecMsgData    = 9;//消息体数据
+    sint32            iActiveCount  = 10;//当前连接活跃次数
+}
+
+enum Eum_Comm_Msgid
+{
+    E_MSGID_DEFAULT = 0;
+
+    //游戏消息 client<-->gameSO, msgid(1--10给游戏so使用)
+    E_MSGID_GAME_SO_REQ                     = 1;    //游戏消息请求[C->S]so中实现
+    E_MSGID_GAME_SO_RESP                    = 2;    //游戏消息应答[S->C]
+    E_MSGID_GAME_SO_NOTIFY                  = 3;    //游戏消息通知[S->C]
+    E_MSGID_SIZZLER_SO_NOTIFY               = 4;    //时时乐游戏通知消息[S->C]
+
+    //Route使用消息, msgid(11-20给Route使用)
+    E_MSGID_LOGIN_HALL_REQ                  = 11;   //登录大厅消息请求[C->S]
+    E_MSGID_LOGIN_HALL_RESP                 = 12;  //登录大厅消息响应[S->C]
+
+    E_MSGID_KEEP_ALIVE_REQ                  = 13;   //心跳消息请求
+    E_MSGID_KEEP_ALIVE_RESP                 = 14;  //心跳消息响应
+
+    //Room使用消息, msgid(21-100给Room使用)
+    //msgid(21-30给Room单向通知客户端使用)
+    E_MSGID_OFFLINE_NOTIFY                  = 21; //断线消息响应[S->C,Data:]
+    E_MSGID_SERVER_RESET_NOTIFY             = 22; //重启通知
+    E_MSGID_USER_NOT_EXIST_NOTIFY           = 23; //用户不存在
+    E_MSGID_ROOMID_NOT_EXIST_NOTIFY         = 24; //ROOMID不存在
+    E_MSGID_WEALTH_NOT_ENOUGH_NOTIFY        = 25; //财富不够
+    E_MSGID_TABLE_NOT_ENOUGHT_NOTIFY        = 26; //桌子不够
+    E_MSGID_WEALTH_OVER_NOTIFY              = 27; //财富超过
+
+    //msgid(31-100给Room响应客户端请求的公共消息)
+    E_MSGID_CHAT_TE_REQ                     = 31;   //文本与表情聊天请求[C->S,Data:]
+    E_MSGID_CHAT_TE_NOTIFY                  = 32;   //文本与表情聊天通知[S->C,Data:]
+    E_MSGID_CHAT_AUDIO_REQ                  = 33;   //语音聊天请求[C->S,Data:]
+    E_MSGID_CHAT_AUDIO_NOTIFY               = 34;   //语音聊天结果[S->C,Data:]
+    E_MSGID_GPS_REQ                         = 35;   //GPS请求[C->S,Data:]
+    E_MSGID_GPS_NOTIFY                      = 36;   //GPS结果[S->C,Data:]
+    E_MSGID_GPS_RE_REQ                      = 37;   //GPS再请求[C->S,Data:]
+    E_MSGID_CHAT_TE_LIST_REQ                = 38;
+    E_MSGID_CHAT_TE_LIST_RESP               = 39;
+
+    E_MSGID_WATCH_REQ                       = 46;   //观战列表
+    E_MSGID_WATCH_RESP                      = 47;
+    E_MSGID_WATCH_NOTIFY                    = 48;
+}
+
+//登录应答
+message TMsgRespLoginHall
+{
+    sint32 iResultID = 1;    //返回结果：0：成功，其他：失败
+    string sPubKey   = 2; //公钥
+}
+
+//Room使用msgid消息结构
+//玩家断线消息响应
+message TMsgRespOffline
+{
+    sint64 lPlayerID    = 1;    //玩家ID
+    sint32 iChairID     = 2;    //桌子位置
+}
+
+//文本与表情聊天请求
+message TMsgReqChat
+{
+    sint32 iChatType    = 1;   //聊天类型 1.文本聊天, 2.表情聊天 3.表情礼包 4. 礼物
+    string sChatData    = 2;   //聊天数据内容
+    sint32 iDestChairId = 3;   //目的座位号  -1 : 所有人
+    sint32 iPropsID     = 4;   //道具ID
+    sint32 iDuration    = 5;   //语音消息时长
+}
+
+//文本与表情聊天响应
+message TMsgRespChat
+{
+    sint32 iResultID            = 1;    //返回结果：0.成功
+    sint32 iChatType            = 2;    //聊天类型 1.文本聊天, 2.表情聊天 3.表情礼包
+    string sChatData            = 3;    //聊天数据内容
+    sint32 iChairID             = 4;    //玩家所在桌子位置
+    string sName                = 5;    //发起者名字
+    string sAvatar              = 6;    //玩家头像
+    sint32 iGender              = 7;    //玩家性别 0-未知 1-男 2-女
+    sint64 lPlayerID            = 8;    //玩家ID
+    sint64 lTimestamp           = 9;    //时间戳
+    sint32 iDestChairId         = 11;   //目的座位号
+    sint32 iPropsID             = 12;   //使用道具ID
+    sint32 iDuration            = 13;   //语音消息时长
+    string sChatId              = 14;   //消息id
+}
+
+message ChatInfo
+{
+    sint32 iChatType  = 1;    //聊天类型 1.文本聊天, 2.表情聊天 3.表情礼包
+    string sChatData  = 2;    //聊天数据内容
+    string sAvatar    = 3;    //玩家头像
+    sint64 lPlayerID  = 4;    //玩家ID
+    sint64 lTimestamp = 5;    //时间戳
+    string sName      = 6;
+    sint32 iDuration  = 7;    //语音消息时长
+    sint32 iState     = 8;    //读取状态 0：未读取  1：已读取
+    string sChatId    = 9;    //消息id
+}
+message TMsgReqChatList
+{
+    sint32 iPage = 1;
+}
+
+//E_MSGID_CHAT_TE_LIST_RESP
+message TMsgRespChatList
+{
+    sint32 iResultID        = 1;// 返回结果：0.成功
+    repeated ChatInfo infos = 2;
+    sint32 record_count     = 3;// 总记录数
+    sint32 curr_page        = 4;// 当前页数
+    sint32 show_count       = 5;// 每一页显示条数
+}
+
+//语音聊天请求
+message TMsgReqAudioChat
+{
+    string sChatId    = 1;    //消息id
+}
+
+//语音聊天响应
+message TMsgRespAudioChat
+{
+    sint32 iResultID = 1;    // 返回结果：0.成功
+    string sChatId   = 2;    //消息id
+    sint32 iState    = 3;    //读取状态 0：未读取  1：已读取
+}   
+
+//GPS请求
+message TMsgReqGPS
+{
+    sint32 iLongitude   = 1; //经度
+    sint32 iLatitude    = 2;  //纬度
+}
+
+//GPS响应
+message TMsgRespGPS
+{
+    sint32 iResultID    = 1;  //返回结果：0.成功, -1.其它错误
+    sint32 iChairID     = 2;   //椅子ID
+    sint32 iLongitude   = 3; //经度
+    sint32 iLatitude    = 4;  //纬度
+}
+
+message TMsgRespServerReset
+{
+    sint32 iResultID    = 1;  //
+}
+
+
+//玩家游戏状态
+enum Eum_Comm_Player_State
+{
+    EUM_PLAYER_STATE_OFFLINE = 0; //离线
+    EUM_PLAYER_STATE_ONLINE  = 1; //在线
+    EUM_PLAYER_STATE_PLAYING = 2; //游戏中
+}
+
+
+//观战列表
+message TMsgRespWatchList
+{
+    message PlayerItem
+    {
+        sint64 lPlayerID        = 1;    //玩家ID
+        string sNickName        = 2;    //玩家昵称
+        string sHeadStr         = 3;     //头像路径
+        sint32 iPlayerGender    = 4;  //玩家性别 0-未知 1-男 2-女
+        sint64 lTimestamp       = 5;   //邀请时间戳
+        bool bOffLine           = 6;//
+    }
+    sint32 iResultID            = 1;
+    sint32 iTotalCount          = 2;
+    repeated PlayerItem item    = 3;
+}
+
+/********** room 辅助结构协议 ***********/
+
+enum Eum_Reward_Model
+{
+    E_FIXED_POINT           = 0; //固定奖励积分
+    E_DYNAMIC_POINT         = 1; //动态奖励积分
+    E_MULT_PROPS            = 2; //固定多道具
+}
+
+message PropsReward
+{
+    map<sint32, sint64> mapPropsReward          = 1;//道具信息
+}
+
+//追加奖励 增量控制
+message ExtraRewardMultInfo
+{
+    sint32 iMinMult                             = 1;//最小倍数
+    sint32 iMaxMult                             = 2;//最大倍数
+    PropsReward propsInfo                       = 3;//奖励道具
+}
+
+//追加奖励 名次控制
+message ExtraRewardRankInfo
+{
+    sint32 iStartRank                           = 1;//开始名次
+    sint32 iEndRank                             = 2;//结束名次
+    repeated ExtraRewardMultInfo multInfo       = 3;//增量奖励配置
+}
+
+//追加奖励 人数控制
+message ExtraRewardPlayerInfo
+{
+    sint32 iMinPlayerCount                      = 1;//最小人数
+    sint32 iMaxPlayerCount                      = 2;//最大人数
+    repeated ExtraRewardRankInfo rankInfo       = 3;//名次奖励配置
+}
+
+message FixedMultRewardInfo
+{
+    sint32 iStartRank                           = 1;//开始名次
+    sint32 iEndRank                             = 2;//结束名次
+    PropsReward propsInfo                       = 3;//奖励道具
+}
+
+//奖励配置
+message RewardConf
+{
+    map<sint32, sint64> mapRewardPool                       = 1;  //初始奖池 id:count
+    map<sint32, sint32> mapRewardRatio                      = 2;  //奖励比例 rank:ratio(万分比)
+    repeated FixedMultRewardInfo fixedMultRewardInfo        = 3;  //固定多奖励
+    repeated ExtraRewardPlayerInfo extraRewardPlayerInfo    = 4;  //额外追加奖励
+    Eum_Reward_Model eModel                                 = 5;  //奖励模式
+}
+
+enum Eum_Blind_Type
+{
+    E_BLIND_NORMAL          = 0; //盲注
+    E_BLIND_DELAY_SIGNUP    = 1; //延迟报名
+    E_BLIND_REBUY           = 2; //rebuy
+    E_BLIND_ADD_ON          = 3; //add-on
+    E_BLIND_WAIT            = 4; //休息
+}
+
+//盲注配置
+message BlindConf
+{
+    message BlindInfo
+    {
+        Eum_Blind_Type eType    = 1;//
+        sint32 iLevel           = 2;//盲注级别
+        sint32 lAnte            = 3;//前注
+        sint32 lSmallBlind      = 4;//小盲
+        sint32 lBigBlind        = 5;//大盲
+        sint32 lDuration        = 6;//时长
+    }
+    map<sint32, BlindInfo> mapBlindConf = 1; //盲注配置 index: info
+}

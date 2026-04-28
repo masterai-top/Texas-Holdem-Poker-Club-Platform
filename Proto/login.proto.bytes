@@ -1,0 +1,260 @@
+syntax = "proto3";
+
+option cc_generic_services = false;
+
+package LoginProto;
+
+// 登出
+message LogoutReq
+{
+   sint32 uid = 1;    //用户ID
+}
+
+message LogoutResp
+{
+    sint32 resultCode = 1; //结果码
+}
+//Token验证
+message CheckLoginTokenReq
+{
+    sint64 lUid = 1;    //用户ID
+    string sToken = 2;  //登录token值，即微信refresh_token
+}
+
+//平台类型
+enum E_Platform_Type
+{
+    E_PLATFORM_TYPE_UNKNOWN = 0;  //未知
+    E_PLATFORM_TYPE_IOS = 1;      //ios
+    E_PLATFORM_TYPE_ANDROID = 2;  //android
+    E_PLATFORM_TYPE_H5 = 3;       //h5
+}
+
+//渠道号
+enum E_Channel_ID
+{
+    E_CHANNEL_ID_UNKNOWN  = 0;   //未知
+    E_CHANNEL_ID_TEST     = 1;   //测试渠道
+    E_CHANNEL_ID_PHONE    = 2;   //手机
+    E_CHANNEL_ID_EMAIL    = 3;   //邮箱
+}
+
+// 账号注册
+message RegisterInfo
+{
+    string userName          = 1;  //账号
+    string passwd            = 2;  //密码
+    string deviceID          = 3;  //设备唯一码（android: imei, ios: idfa）
+    string deviceType        = 4;  //机型信息
+    E_Platform_Type platform = 5;  //平台类型
+    E_Channel_ID channnelID  = 6;  //渠道号
+    int32  areaID            = 7;  //所属区域ID
+}
+
+//token 重连(免密)登录
+message QuickLoginReq
+{
+    sint32 loginType    = 1; //0:重连  1:免密
+    sint64 uid          = 2; //用户ID
+    string token        = 3; //登录Token值
+    string deviceID     = 4; //设备唯一码（android: imei, ios: idfa）
+}
+
+message QuickLoginResp
+{
+    sint32 resultCode   = 1; //结果码
+    sint64 uid          = 2; //用户ID
+    string token        = 3; //登录Token值
+    sint32 flag         = 4; //是否新账号，0--否，1--是
+    sint32 loginType    = 5; //0:重连  1:免密
+}
+
+//注册
+message UserRegisterReq
+{
+    string           msgCode = 1;  //手机验证码
+    RegisterInfo     registerInfo = 2; //注册请求参数
+}
+
+message UserRegisterResp
+{
+    sint32 resultCode = 1;    //结果码
+    sint64 uid = 2;         //用户ID
+}
+
+//登录
+message UserLoginReq
+{
+    string          userName    = 1;  //账号
+    string          passwd      = 2;  //密码
+    int32           areaID      = 3;  //区号
+    string          deviceID    = 4;  //设备唯一码（android: imei, ios: idfa）
+    string          deviceType  = 5;  //机型信息
+    E_Platform_Type platform    = 6;  //平台类型
+    E_Channel_ID    channnelID  = 7;  //渠道号
+}
+
+message UserLoginResp
+{
+    sint32 uid = 1; //用户ID
+    string token = 2; //登录Token值
+    sint32 resultCode = 3; //结果码
+}
+
+//重置密码
+message UserResetPasswordReq
+{
+    string          userName = 1; //手机号
+    string          msgCode = 2;  //验证码
+    string          newPassword = 3;//新密码
+}
+
+message UserResetPasswordResp
+{
+    sint32 resultCode = 1; //结果码
+}
+
+// 发送验证码(type = 0 走post)
+message SendMessageCodeReq
+{
+    string userName          = 1;   // 账号
+    E_Channel_ID channnelID  = 2;   // 渠道号
+}
+
+message SendMessageCodeResp
+{
+    sint32 resultCode = 1; //结果码
+}
+
+//LOGIN_VERIFY_CODE
+message VerifyCodeReq
+{
+    string          userName = 1; //手机号
+    string          msgCode = 2;  //验证码
+}
+
+//LOGIN_VERIFY_CODE
+message VerifyCodeResp
+{
+    sint32 resultCode = 1; //结果码
+}
+
+//LOGIN_SET_SAFE_PWD
+message SetSafePwdReq
+{
+    string          userName = 1; //手机号
+    string          msgCode = 2;  //验证码
+    string          safePwd = 3;  //安全码
+}
+
+message SetSafePwdResp
+{
+    sint32 resultCode = 1; //结果码
+}
+
+//请求网关地址信息
+message UserRounterInfoReq
+{
+    sint32 reserve = 1; //默认值非0
+}
+message UserRounterInfoResp
+{
+    sint32 resultCode = 1; //结果码
+    string routerAddr = 2; //网关地址
+    sint32 routerPort = 3; //网关端口
+}
+
+/**********tcp*********/
+// 登出
+message UserLogoutResp
+{
+    sint32 resultCode = 1; //结果码
+}
+
+// 发送手机验证码
+message UserPhoneSendCodeReq
+{
+    string phone = 1;   // 手机号
+    sint32 type  = 2;   // 1 旧手机号(账号) 2 新手机号 3 安全码(账号) 4 注销账号 5 重置密码
+}
+
+message UserPhoneSendCodeResp
+{
+    sint32 resultCode = 1;   // 结果码
+}
+
+// 验证手机验证码(type = 2的 成功后会直接更换账号)
+message UserPhoneVerifyCodeReq
+{
+    string msgCode = 1;   // 验证码
+    sint32 type    = 2;   // 1 旧手机号 2 新手机号 3 安全码(账号) 5 重置密码(账号)
+}
+
+message UserPhoneVerifyCodeResp
+{
+    sint32 resultCode = 1;   // 结果码
+    sint32 type       = 2;   // 1 旧手机号 2 新手机号 3 安全码(账号) 5 重置密码(账号)
+    string phone      = 3;   // 手机号(type=2时成功后的账号)
+}
+
+// 设置安全码
+message UserSetSafePwdReq
+{
+    string safePwd = 1;  //安全码
+}
+
+message UserSetSafePwdResp
+{
+    sint32 resultCode = 1; //结果码
+}
+
+// 注销账号
+message UserPhoneWriteOffReq
+{
+    string msgCode  = 1;   // 验证码
+    string password = 2;   // 账号密码
+    string safePwd  = 3;   // 安全码
+}
+
+message UserPhoneWriteOffResp
+{
+    sint32 resultCode = 1;   // 结果码
+}
+
+// 重置密码
+message UserResetPwdReq
+{
+    string password = 1;   // 密码
+}
+
+message UserResetPwdResp
+{
+    sint32 resultCode = 1;   // 结果码
+}
+
+// 实名认证申请
+message UserInitFaceVerifyReq
+{
+    string sCertName  = 1;    // 身份证真实姓名
+    string sCertNo    = 2;    // 身份证号码
+    string sMetaInfo  = 3;    // metaInfo信息，把json数据打包成string
+    string sReturnUrl = 4;    // 返回地址(web端用)
+}
+
+message UserInitFaceVerifyResp
+{
+    sint32 resultCode  = 1;    // 结果码
+    string sCertifyId  = 2;    // 阿里返回的key
+    string sCertifyUrl = 3;    // 阿里返回的url(web端用)
+}
+
+// 实名认证结果查询
+message UserDescribeFaceVerifyReq
+{
+    string sCertifyId = 1;    // key 实名认证申请返回的
+}
+
+message UserDescribeFaceVerifyResp
+{
+    sint32 resultCode = 1;   // 结果码
+}

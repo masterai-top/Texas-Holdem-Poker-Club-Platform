@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+option cc_generic_services=false;
+
+package OrderProto;
+
+enum E_PRODUCT_TYPE
+{
+    E_PRODUCT_MALL          = 0; //商品
+    E_PRODUCT_PROPS         = 1; //道具
+}
+
+enum E_PAY_TYPE
+{
+    E_PAY_ALI            = 0; //支付宝
+    E_PAY_WECHAT         = 1; //微信
+    E_PAY_EXCHANGE       = 2; //兑换
+    E_PAY_MAN            = 3; //人工
+    E_PAY_IOS            = 4; //IOS 支付
+}
+
+message PropsInfo
+{
+    sint32 iPropsID         = 1;    //道具id
+    sint64 iPropsCount      = 2;    //道具数量
+    string sPropsIconSmall  = 3;
+    string sPropsIconBig    = 4;
+    string sPropsName       = 5;
+}
+
+//商品信息
+message ProductInfo
+{
+    string sProductId                = 1;
+    E_PRODUCT_TYPE eProductType      = 2;
+    string sProductName              = 3;
+    string sProductIcon              = 4;
+    repeated PropsInfo vBuyGroup     = 5;
+    repeated PropsInfo vExtraGroup   = 6;
+    repeated PropsInfo vCostGroup    = 7;
+    sint32 iPrice                    = 8;
+    sint32 iDiscount                 = 9;
+    sint32 iHot                      = 10;
+}
+
+//订单信息
+message OrderInfo
+{
+    string sInOrderId                  = 1;
+    string sOutOrderId                 = 2;//第三方交易ID
+    E_PAY_TYPE ePayType                = 3;
+    sint32 iExchangeIndex              = 4;//兑换组index
+    sint32 iOrderState                 = 5;
+    sint64 lOrderTime                  = 6;
+    sint32 iProductCount               = 7;
+    ProductInfo mProductInfo           = 8;
+    string sCredential                 = 9; // JSON 格式 ios 验证订单参数
+}
+
+//ORDRE_PRODUCT_LIST  商品查询
+message OrderProductListReq
+{
+    E_PRODUCT_TYPE eProductType         = 1;
+}
+
+message OrderProductListResp
+{
+    sint32 iResultID                    = 1;
+    repeated ProductInfo vProductInfos  = 2;
+}
+
+//ORDRE_CREATE_ORDER  创建商品订单
+message OrderCreateReq
+{
+    E_PAY_TYPE ePayType                 = 1;
+    string sProductId                   = 2;
+    sint32 iProductCount                = 3;
+    sint32 iExchangeIndex               = 4;//兑换组index
+}
+
+message OrderCreateResp
+{
+    sint32 iResultID                    = 1;
+    OrderInfo mOrderInfo                = 2;
+}
+
+message OrderVerifyReq
+{
+    OrderInfo mOrderInfo                = 1;
+}
+
+message OrderVerifyResp
+{
+    sint32 iResultID                    = 1;
+    OrderInfo mOrderInfo                = 2;
+}
+
+//ORDER_STATE_QUERY 订单状态查询
+message OrderStateQueryReq
+{
+    string sOrderId                     = 1;
+}
+
+message OrderStateQueryResp
+{
+    sint32 iResultID                    = 1;
+    OrderInfo mOrderInfo                = 2;
+}
+
+//ORDER_STATE_NOTIFY  订单状态通知
+message OrderStateQueryNotify
+{
+    OrderInfo mOrderInfo                = 1;
+}
+
+//ORDER_LIST_QUERY 订单明细查询
+message OrderListQueryReq
+{
+    sint32 iPage                        = 1;
+    E_PAY_TYPE ePayType                 = 2;//兑换类型 and 非兑换类型
+}
+
+message OrderListQueryResp
+{
+    sint32 iResultID                    = 1;
+    repeated OrderInfo vecOrderInfo     = 2;
+    sint32 iPage                        = 3;
+    sint32 iTotalPage                   = 4;
+}

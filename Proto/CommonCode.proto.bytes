@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+option cc_generic_services = false;
+
+package XGameRetCode;
+
+//系统错误码
+enum RetCodeEnum
+{
+    // SYS_INTERNAL_ERROR = -1;    //"系统内部错误"
+    
+    //公共
+    SUCCESS                                     = 0;//"正常"
+    SYS_ERROR                                   = 1;//"系统错误"
+    SYS_BUSY                                    = 2;//"系统繁忙"
+    INNER_ERROR                                 = 3;//"内部错误"
+    PACKAGE_ERROR                               = 4;//"消息包错误"
+    ARG_NULL_ERROR                              = 5;//"参数不可为空"
+    ARG_INVALIDATE_ERROR                        = 6;//"无效的参数"
+    
+    //登录
+    LOGIN_MULTIPLE_LOGIN                        = 301;//"重复登录"
+    LOGIN_PARAM_ERROR                           = 302;//"登录参数错误"
+    LOGIN_SERVER_ERROR                          = 303;//"服务器内部错误"
+    LOGIN_BLACK_LIST                            = 304;//"黑名单"
+    LOGIN_PASSWD_ERROR                          = 305;//"账号或密码错误"
+    LOGIN_TOKEN_INCONSISTENT                    = 306;//"token 不一致"
+    LOGIN_TOKEN_EXPIRED                         = 307;//"token 过期"
+    LOGIN_GETHTTP_ERROR                         = 308;//"网络请求错误"
+    LOGIN_GETHTTP_DATA_ERROR                    = 309;//"网络数据错误"
+
+    LOGIN_AUTH_CODE_ERROR                       = 314;   // 验证码错误
+    LOGIN_AUTH_CODE_TIMEROUT                    = 315;   // 验证码失效
+    LOGIN_FROMAT_EROOR                          = 316;   // 格式错误
+    LOGIN_PASSWD_ERROR_LIMIT                    = 317;   // 错误次数超出限制
+    LOGIN_ACCOUNT_NOT_EXSIT                     = 318;   // 账号不存在
+    LOGIN_ACCOUNT_EXSITED                       = 319;   // 账号已注册
+    LOGIN_PHONE_ERROR                           = 320;   // 手机号号不正确
+    LOGIN_SAFE_PWD_ERROR                        = 321;   // 安全码不符合规则
+    LOGIN_PHONE_PASSWD_FAILED                   = 322;   // 密码错误
+    LOGIN_PHONE_SAFE_PWD_FAILED                 = 323;   // 安全码错误
+    LOGIN_ICD_ALREADY_VERIFY                    = 324;   // 账号已实名
+    LOGIN_ICD_VERIFY_FAILED                     = 325;   // 实名失败
+
+    //用户信息
+    // USER_INFO_NICKNAME_EXIST                 = 501;   // 昵称已经存在
+    USER_INFO_NICKNAME_NO_CHANGE                = 502;   // 昵称无变化
+    USER_INFO_NICKNAME_HAVE_SENSITIVE_WORDS     = 503;   // 含有违禁词
+    USER_INFO_NO_NICKNAME                       = 504;   // 无昵称
+    USER_INFO_NICKNAME_SPECIAL_CHARACTER        = 505;   // 昵称不能含有特殊字符
+    USER_INFO_NO_CHANGE                         = 506;   // 修改信息无变化
+    USER_INFO_NO_GENDER                         = 507;   // 性别有误
+    USER_INFO_SAFEPWD_NOT_EQUAL                 = 508;   // 安全码错误
+    USER_INFO_NO_PROP                           = 509;   // 资格卡信息错误
+    USER_INFO_PROP_MARK                         = 510;   // 资格卡已登记使用
+    USER_INFO_PROP_INFO_TIME_LIMIT              = 511;   // 资格卡已过期
+    USER_INFO_PROP_MARK_ERROR                   = 512;   // 资格卡登记使用错误
+    USER_INFO_REMARK_LENGTH_LIMIT               = 513;   // 最大字数限制
+    USER_INFO_SING_SPECIAL_CHARACTER            = 514;   // 签名不能含有特殊字符
+
+    ORDER_PRODUCT_NOT_EXIST                     = 601;//商品不存在
+    ORDER_EXCHANGE_NOT_EXIST                    = 602;//兑换不存在
+    ORDER_FREQUENT_OPERATION                    = 603;//频繁下单
+    ORDER_SERVER_CLOSE                          = 604;//支付服务关闭
+    ORDER_NOT_EXIST                             = 605;//订单不存在
+    ORDER_STATUS_FAIL                           = 606;//检查订单状态失败
+
+    //房间
+    ROOM_USER_NO_LOGIN                          = 1000;// 未登录房间
+    ROOM_ROOM_NOT_EXIST                         = 1001;// 房间不存在
+    ROOM_CREATE_OPTION_ERR                      = 1002;// 开房选项错误
+    ROOM_USER_NOT_CAN_GAME                      = 1003;// 玩家无法参与游戏
+    ROOM_USER_NO_SIGNUP                         = 1004;// 玩家没有报名
+    ROOM_USER_ALREADY_SIGNUP                    = 1005;// 玩家已经报名
+    ROOM_GAME_BEGINING                          = 1006;// 比赛已经开始
+    ROOM_MAX_NUMBER_LIMT                        = 1007;// 最大报名人数限制
+    ROOM_FEE_LACK                               = 1008;// 费用不足
+    ROOM_NOT_CAN_SIGNUP                         = 1009;// 不能报名
+    ROOM_REBUY_COUNT_LACK                       = 1010;// rebuy 次数不足
+    ROOM_PERMISSION_DENIED                      = 1011;// 权限不足
+    ROOM_TABLE_COUNT_LACK                       = 1012;// 桌子资源不足
+    ROOM_CHAT_CD                                = 1013;// 消息太频繁
+    ROOM_NOT_REALNAME                           = 1014;// 玩家没有实名验证
+    ROOM_NOT_CAN_CANCEL_SIGNUP                  = 1015;// 不能取消报名
+    ROOM_USER_BAN_CHAT                          = 1016;// 玩家被禁言
+    ROOM_USER_WATCH_CHAT                        = 1017;// 旁观状态不能聊天
+    
+    //游戏
+    GAME_NO_SERVICE_CONFIG              = 1101;//无服务消耗配置
+    GAME_USER_NOT_EXIST                 = 1102;//玩家不存在
+    GAME_CHANGE_TABLE_NOT_SIT           = 1103;//当前房间缺少有空位的桌子
+    GAME_WAIT_NEXT_GAME                 = 1104;//等待下一局
+    GAME_TWO_NOT_OPTION                 = 1105;//连续两局未操作
+    GAME_WAIT_TIMEOUT                   = 1106;//等待超时，退出房间
+    GAME_WATCH_NOT_EXIST                = 1107;//玩家不再旁观列表
+    GAME_PAUSE_TIMEOUT                  = 1108;//挂机超时站起
+    GAME_HOLD_SEAT_TIMEOUT              = 1109;//占座超时站起
+    GAME_COLLECT_OUT_LIMIT              = 1110;//收藏超过上线
+
+    //PUSH
+    SERVER_UPDATE_NOTIFY            = 1601;//服务维护通知
+    CONNECTTION_IDLE_TOO_LONG       = 1602;//连接空闲太长时间
+    SETTLEMENT_RESULT_EXIT          = 1603;//结算中请稍后退出
+
+    //
+
+}

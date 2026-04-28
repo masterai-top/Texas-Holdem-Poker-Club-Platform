@@ -1,0 +1,239 @@
+syntax = "proto3";
+
+option cc_generic_services=false;
+
+package UserInfoProto;
+
+
+// 获取用户基本信息
+message GetUserBasicReq
+{
+	sint64 uid = 1;   // 用户UID
+}
+
+message UserExpInfo
+{
+	sint32 iLevel 		= 1;// 等级
+	sint32 iExperience 	= 2;// 当前等级经验
+	sint32 iCurLevelExp = 3;// 升级经验
+}
+
+message GetUserBasicResp
+{
+	sint32 resultCode  = 1;    // 结果码
+	sint32 gender      = 2;    // 用户性别, 0:未知,1:男,2:女
+	string name        = 3;    // 用户名称
+	string head        = 4;    // 用户头像
+	string signature   = 5;    // 用户签名
+	sint64 rewardPoint = 6;	   // 奖励积分
+	sint64 entryPoint  = 7;	   // 参赛积分
+	sint64 videoPoint  = 8;	   // 视频积分
+	string safePwd 	   = 9;	   // 安全码
+	sint32 areaCode    = 10;   // 用户所属区域ID
+	string username    = 11;   // 账号
+	sint64 systemTime  = 12;   // 服务器系统时间戳
+	sint64 regTime     = 13;   // 注册时间戳
+	string telephone   = 14;   // 联系方式
+	sint32 idcVerify   = 15;   // 是否实名 0: 否  1: 是
+	string sRemarkContent 		= 16;// 玩家备注
+	bytes sUserStat		  	    = 17;// 玩家数据  GameRecordProto::UserInfo
+	UserExpInfo userExpInfo     = 18;// 玩家经验等级
+}
+
+// 批量获取用户基本信息
+message ListUserBasicReq
+{
+	repeated sint64 uidList = 1;   // 用户UID列表
+}
+
+message ListUserBasicResp
+{
+	sint32 resultCode 						= 1;   // 结果码
+	map<sint64, GetUserBasicResp> basicList = 2;   // 用户基本信息列表
+}
+
+// 更新用户信息
+message UpdateUserInfoReq
+{
+	message UpdateInfo
+	{
+		string colName  = 1;   // 更新参数
+		string colValue = 2;   // 更新值
+	}
+	repeated UpdateInfo updateInfo = 1;   // 更新列表
+}
+
+message UpdateUserInfoResp
+{
+	message UpdateInfo
+	{
+		string colName  = 1;   // 更新参数
+		string colValue = 2;   // 更新值
+	}
+	sint32 resultCode 			   = 1;   // 结果码
+	repeated UpdateInfo updateInfo = 2;   // 更新列表
+}
+
+message UserAddressInfo
+{
+	sint64 gid 		 = 1;   // 唯一ID
+	sint64 uid       = 2;   // 玩家UID
+	sint32 status    = 3;   // 状态 0 正常 1 默认
+	string nickname  = 4;   // 姓名
+	string telephone = 5;   // 电话
+	string address   = 6;   // 地址
+}
+
+message ListUserAddressResp
+{
+	sint32 resultCode              = 1;   // 结果码
+	repeated UserAddressInfo infos = 2;   // 数据列表
+}
+
+//
+message AddUserAddressReq
+{
+	sint32 status    = 1;   // 状态 0 正常 1 默认
+	string nickname  = 2;   // 姓名
+	string telephone = 3;   // 电话
+	string address   = 4;   // 地址
+}
+
+message AddUserAddressResp
+{
+	sint32 resultCode    = 1;   // 结果码
+	UserAddressInfo info = 2;   // 数据
+}
+
+
+message UpdateUserAddressReq
+{
+	message UpdateData
+	{
+		string colName  = 1;   // 更新参数
+		string colValue = 2;   // 更新值
+	}
+	sint64 gid                     = 1;   // 唯一ID
+	repeated UpdateData updateData = 2;   // 更新字段
+}
+
+message UpdateUserAddressResp
+{
+	message UpdateData
+	{
+		string colName  = 1;   // 更新参数
+		string colValue = 2;   // 更新值
+	}
+	sint32 resultCode              = 1;   // 结果码
+	sint64 gid                     = 2;   // 唯一ID
+	repeated UpdateData updateData = 3;   // 更新字段
+}
+
+message DeleteUserAddressReq
+{
+	sint64 gid = 1;   // 唯一ID
+}
+
+message DeleteUserAddressResp
+{
+	sint32 resultCode = 1;   // 结果码
+	sint64 gid        = 2;   // 唯一ID
+}
+
+//USER_AUTH_SAFEPWD
+message AuthSafePwdReq
+{
+	string sSafePwd    = 1;
+}
+
+message AuthSafePwdResp
+{
+	sint32 resultCode = 1;   // 结果码
+}
+
+message UserPropsInfo
+{
+	sint64 uid        = 1;    // 玩家UID
+	sint64 pid        = 2;    // 卡ID
+	sint32 pType      = 3;    // 卡类型
+	sint64 gTime      = 4;    // 生成时间
+	sint32 cTime      = 5;    // 有效时长(秒)
+	string sUuid      = 6;    // 唯一码
+	sint32 iState     = 7;    // 状态 0 未使用 1 已使用
+	string sChannel   = 8;    // 获取渠道
+	string sAddress   = 9;    // 赛事地点
+	string sName      = 10;   // 卡券名称
+	string sIconBig   = 11;   // 大图标
+	string sIconSmall = 12;   // 小图标
+}
+
+message ListUserPropsReq
+{
+	sint32 iType = 1;   // 卡类型 0 所有 1 电子卡 2 资格卡 3 酒店卡	
+}
+
+message ListUserPropsResp
+{
+	sint32 resultCode            = 1;   // 结果码 0 成功
+	sint32 iType                 = 2;   // 卡类型 0 所有 1 电子卡 2 资格卡 3 酒店卡
+	repeated UserPropsInfo infos = 3;   // 数据列表
+}
+
+message UpdateUserRemarkReq
+{
+	sint64 remarkUid 			= 1;
+	string sRemarkContent 		= 2;
+}
+
+message UpdateUserRemarkResp
+{
+	sint32 resultCode            = 1;   // 结果码 0 成功
+}
+
+message UserRemarkInfo
+{
+	sint64 uid         = 1;    // 用户UID
+	string head        = 2;    // 用户头像
+	string name        = 3;    // 用户名称
+	string content     = 4;    // 标签内容
+}
+
+message ListUserRemarkResp
+{
+	sint32 resultCode             = 1;   // 结果码 0 成功
+	repeated UserRemarkInfo infos = 2;   // 详情
+}
+
+// 查看资格卡信息
+message ShowPropInfoReq
+{
+	sint64 lUid  = 1;   // UID
+	string sCode = 2;   // 卡值(唯一)
+}
+
+message ShowPropInfoResp
+{
+	sint32 resultCode = 1;    // 结果码
+	string sCode      = 2;    // 卡值(唯一)
+	string sName      = 3;    // 卡券名称
+	string sAddress   = 4;    // 赛事地点
+	string sPlatform  = 5;    // 获得渠道
+	sint64 lGetTime   = 6;    // 获取得时间戳
+	sint64 lEndTime   = 7;    // 使用时间戳(有效期)
+	sint32 iStatus    = 8;    // 状态 0 未使用 1 已使用
+	string sNickname  = 9;    // 运动员昵称
+	string sUserCode  = 10;   // 运动员证件号
+	string sTelephone = 11;   // 联系方式
+}
+
+// 资格卡登记使用
+message MarkPropInfoReq
+{
+	string sCode = 1;   // 卡值
+	sint64 lUid  = 2;   // 卡的拥有者UID
+}
+
+message MarkPropInfoResp
+{
+	sint32 resultCode = 1;   // 结果码
+}

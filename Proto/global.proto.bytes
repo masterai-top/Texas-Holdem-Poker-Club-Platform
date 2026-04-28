@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option cc_generic_services=false;
+
+package GlobalProto;
+
+// 申诉类型
+enum E_QUEST_TYPE
+{
+    E_QUEST_NONE  = 0;
+    E_QUEST_APP   = 1;   // APP使用问题
+    E_QUEST_CHEAT = 2;   // 作弊问题
+    E_QUEST_USE   = 3;   // 常规使用问题
+}
+
+// 申诉
+message SendQuestReq
+{
+    sint32 iType          = 1;   // 类型(注释看E_QUEST_TYPE)
+    string sContent       = 2;   // 内容
+    repeated string sLink = 3;   // 图片链接
+    sint64 lDate          = 4;   // 日期
+}
+
+message SendQuestResp
+{
+    sint32 iResultCode = 1;   // 结果 0 成功
+}
+
+//消息类型
+enum E_MESSAGE_TYPE
+{
+    E_MESSAGE_NONE          = 0;
+    E_MESSAGE_NOTICE        = 1;   //公告
+    E_MESSAGE_JOIN_GAME     = 2;   //牌局请求
+    E_MESSAGE_CLUB_GOLD     = 3;   //俱乐部币
+    E_MESSAGE_MATCH_REWARD  = 4;   //比赛奖励
+}
+
+message MessageData
+{
+    message Info
+    {
+        string sTitle   = 1;   // 标题
+        string sContent = 2;   // 文件内容
+    }
+    sint32 iType        = 1;   // 消息类型(E_MESSAGE_TYPE)
+    sint64 lMessageID   = 2;   // 消息ID
+    sint64 lMessageDate = 3;   // 时间(有可能排序用)
+    Info dInfo          = 4;   // 消息详情
+}
+
+// 消息列表请求
+message QueryMessageReq
+{
+    sint32 iType        = 1;   // 消息类型(E_MESSAGE_TYPE)
+    sint32 iCurrentPage = 2;   // 当前页(1开始)
+}
+
+message QueryMessageResp
+{
+    sint32 iResultCode         = 1;   // 结果 0 成功
+    sint32 iType               = 2;   // 消息类型(E_MESSAGE_TYPE)
+    sint32 iCurrentPage        = 3;   // 当前页(0开始)
+    sint32 iTotoalPage         = 4;   // 总页数
+    repeated MessageData vList = 5;   // 消息列表
+}

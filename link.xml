@@ -1,0 +1,14 @@
+<linker>
+    <assembly fullname="UnityEngine.UnityWebRequestModule">
+	    <namespace fullname="UnityEngine.Networking" preserve="all"/>
+	</assembly>
+    <assembly fullname="UnityEngine.UnityWebRequestTextureModule">
+	    <namespace fullname="UnityEngine.Networking" preserve="all"/>
+	</assembly>
+	<assembly fullname="UnityEngine.CoreModule">
+	    <namespace fullname="UnityEngine" preserve="all"/>
+	</assembly>
+	<assembly fullname="UnityEngine.ImageConversionModule">
+		<namespace fullname="UnityEngine" preserve="all"/>
+	</assembly>
+</linker>

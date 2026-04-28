@@ -1,0 +1,199 @@
+syntax = "proto3";
+
+option cc_generic_services=false;
+
+package Pb;
+
+/**************************牌局战绩***************************/
+enum E_SEAT_NAME
+{
+    BTN         = 0; //庄家
+    SB          = 1; //小盲
+    BB          = 2; //大盲
+    UTG         = 3;
+    UTG1        = 4;//第八人显示
+    MP          = 5;
+    MP1         = 6;//第九人显示
+    HJ          = 7;//第七人显示
+    CO          = 8;
+}
+
+message PropsInfo
+{
+    sint32 iPropsID         = 1;
+    sint32 iPropsCount      = 2;
+    string sPropsIconSmall  = 3;
+    string sPropsIconBig    = 4;
+}
+
+message UserInfo
+{
+    sint64 lPlayerID                    = 1;//用户ID
+    string sNickName                    = 2;//玩家昵称
+    string sHeadStr                     = 3;//头像路径
+    sint32 iPlayerGender                = 4;//玩家性别 0-未知 1-男 2-女
+    E_SEAT_NAME eSeatName               = 5;//座位名字
+    repeated PropsInfo mPropsInfo       = 6;//奖励信息
+    sint32 iRank                        = 7;//排名
+}
+
+message RoomInfo
+{
+    string sRoomIndex                   = 1;//
+    string sRoomKey                     = 2;//房间号
+    string sRoomName                    = 3;//房间名字
+    sint64 lBeginTime                   = 4;//牌局开始时间
+    sint64 lEndTime                     = 5;//牌局结束时间
+    sint32 iPlayerCount                 = 6;//房间人数
+    sint32 iRewardCount                 = 7;//奖励人数
+    sint32 iGameType                    = 8;//玩法
+    sint32 iOnlineGame                  = 9;//线上线下
+    string sRoomIcon                    = 10;//房间icon
+}
+
+message GameBriefInfo
+{
+    RoomInfo roomInfo                   = 1;
+    map<int32, UserInfo> mapUserInfo    = 2;// rank:userinfo
+    UserInfo userInfo                   = 3;// 本人排名信息
+}
+
+//结算信息
+message CalInfo
+{
+    sint64 lPlayerID                 = 1;
+    sint64 lWinCount                 = 2;
+    repeated sint32 vHdCard          = 3;//手牌
+}
+
+message RoundInfo
+{
+    message StepInfo
+    {
+        sint64 lPlayerID                  = 1;//个人信息
+        sint32 iBetType                   = 2;//下注类型
+        sint32 iBetCount                  = 3;//单手下注数
+        sint32 iRoundBetCount             = 4;//本轮下注数
+    }
+    repeated sint32 vComCard          = 1;//公牌
+    sint32 iPlayerCount               = 2;//玩家数
+    sint64 lRoundBetCount             = 3;//本轮积分
+    repeated StepInfo stepInfos       = 4;//步骤信息
+}
+
+message GameDetail
+{
+    string sDetailIndex                 = 1;//编号
+    string sRoomName                    = 2;//房间名字
+    sint32 iTableID                     = 3;//桌子编号
+    repeated UserInfo userInfos         = 4;//用户信息
+    map<sint64, CalInfo> calInfos       = 5;//结算信息
+    map<sint32, RoundInfo> roundInfos   = 6;//轮信息
+}
+
+// 申诉信息
+message GameQuestInfo
+{
+    sint32 lPlayerID      = 1;   // 玩家UID
+    sint32 iType          = 2;   // 类型(注释看E_QUEST_TYPE)
+    string sContent       = 3;   // 内容
+    repeated string sLink = 4;   // 图片链接
+    sint64 lDate          = 5;   // 日期
+    sint64 lTime          = 6;   // 落地时间
+}
+
+
+// 系统信息实体
+message MessageDataInfo
+{
+    string sTitle   = 1;   // 标题
+    string sContent = 2;   // 文件内容
+}
+
+
+/****************************第三方接口协议***********************/
+
+enum THIRD_CMD
+{
+    THIRD_CMD_NOT_DEFINE                  = 0;
+    THIRD_CMD_LOGIN_AISVR_REQ             = 9001;//游戏登录应用请求
+    THIRD_CMD_LOGIN_AISVR_RSP             = 9002;//游戏登录应用反馈
+    THIRD_CMD_KEEPALIVE_REQ               = 9003;//游戏连接心跳请求
+    THIRD_CMD_KEEPALIVE_RSP               = 9004;//游戏连接心跳反馈
+    THIRD_CMD_ROBOT_ACTION_REQ            = 9005;//机器决策请求
+    THIRD_CMD_ROBOT_ACTION_RSP            = 9006;//机器决策结果
+}
+
+//登录服务请求
+message ThirdLoginAiSvrReq
+{
+    string token            = 1; //连接密钥
+}
+
+message ThirdLoginAiSvrRsp
+{
+    int32 resultCode        = 1; //操作结果
+}
+
+//连接心跳
+message ThirdKeepAliveReq
+{
+    message Session
+    {
+        int32 gameId            = 1;
+        int32 betId             = 2;
+    }
+    int32 timestamp             = 1;
+    repeated Session session    = 2;
+
+}
+
+message ThirdKeepAliveRsp
+{
+    int32 timestamp         = 1;
+}
+
+message SeatInfos
+{
+  bool is_robot             = 1; //是否机器人
+  bool is_fold              = 2;  // 是否弃牌
+  repeated int32 hole_card  = 3; //手牌
+  int64 self_bet_to         = 4;//累积下注
+  int64 init_chips          = 5;//初始筹码
+  int64 street_bet_to       = 6;//此街累积下注
+  int64 robot_guid          = 7;//机器人标识
+}
+
+message ActionList
+{
+  repeated int32 action     = 1;
+}
+
+
+//机器人决策
+message ThirdRobotActionReq
+{
+    string                 roomid               = 1;
+    int64                  uid                  = 2;  //标识
+    int32                  small_blind          = 3;  //小盲
+    int32                  big_blind            = 4;  //大盲
+    bool                   is_dealer            = 5;  //是否庄家
+    repeated int32         board_card           = 6;  //公牌（card = rank + suit x 16）
+    int32                  street               = 7;  //hole = 1，flop = 2，turn = 3，river = 4
+    int32                  self_allow_actions   = 8;
+    int64                  run_game_id          = 9; //辅助标识
+    map<int32, ActionList> action_list          = 10; //动作序列
+    repeated SeatInfos     seat_info            = 11; //座位信息，小盲为起始位
+    int32                  game_type            = 12; //游戏类型（）
+    int64                  flop_pool            = 13;// 翻拍轮底池
+}
+
+message ThirdRobotActionRsp
+{
+    int32 resultCode            = 1; //操作结果
+    int32 actionType            = 2; //0:fold 1:call 2:raise
+    int64 betNum                = 3; //加注值
+    string err_msg              = 4; //错误消息
+    int32  action_num           = 5; //请求次数
+}
+
