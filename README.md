@@ -108,7 +108,7 @@
 📱 **Telegram：@xuzongbin001**  
 📧 **Email：masterai918@gmail.com**
 
-👉 **联系我获取演示视频 + 详细报价**
+👉 **联系我获取演示视频 **
 
 ## 🎮 Demo | 演示 | 演示
 
