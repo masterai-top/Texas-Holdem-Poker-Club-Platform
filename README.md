@@ -111,6 +111,7 @@
 👉 **联系我获取演示视频 **
 
 ## 🎮 Demo | 演示 | 演示
+<img width="500" height="889" alt="animation_edited" src="https://github.com/user-attachments/assets/6de3ed8c-17f8-43a5-94c2-896708a4d798" />
 
 See real gameplay below 👇  
 查看游戏实际画面 👇  
