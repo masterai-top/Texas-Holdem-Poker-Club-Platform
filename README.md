@@ -1,29 +1,36 @@
-# 🃏 德州扑克源码 | Texas Hold'em Poker Complete Source Code|德州扑克源码 |德州私人局| 德州撲克源碼| 德州源碼|德州撲克|德州俱樂部| 德州游戏源码|Mã nguồn Poker
+[简体中文](README.md) | [繁體中文](README.zh-TW.md) | [English](README.en.md)
+
+# 德州扑克俱乐部、联盟|德州私人局| 德州撲克源碼| 德州源碼
 
 > **线上稳定运营多年 | 俱乐部+联盟+私人局 | 10+种玩法 | 刚停服，全套源码可售**
-💡 Build your own poker platform in minutes  
 💡 快速搭建属于你的德州扑克平台  
 💡 快速建立自己的德州撲克系統  
+
 
 🔥 Online Multiplayer System  
 🔥 Club + Agent System  
 🔥 Real-Time Gameplay  
 
+
 👉 🚀 Demo Available  
 👉 📩 Contact for Full Version  
-> **线上成功运营多年 | 俱乐部+私人局+联盟 | 产品质量远超hhpoker/德扑圈/WPK**
+> **仓库资料包含俱乐部、私人局与联盟功能；运营历史及功能完整性需独立核验**
+
 
 [![Contact](https://img.shields.io/badge/联系-TG%3A%40xuzongbin001-blue)](https://t.me/xuzongbin001)
 [![Platform](https://img.shields.io/badge/平台-iOS%20%7C%20Android%20%7C%20H5-green)]()
 [![Payment](https://img.shields.io/badge/支付-USDT%201%3A1-orange)]()
 [![Language](https://img.shields.io/badge/服务端-C%2B%2B-red)]()
 
+
 ---
 
 
 ## ✨ 为什么选择这套源码？
 
+
 本项目是**刚刚下架的线上真实项目**，代码经过多年运营验证，绝非Demo。
+
 
 | 核心优势 | 说明 |
 | :--- | :--- |
@@ -35,11 +42,13 @@
 | 🌍 **多国语言** | 支持多种国家语言，适合出海 |
 | 💎 **真实项目** | 刚刚下架，代码稳定，可直接上线 |
 
+
 ### 🇺🇸 English
 - Complete Texas Holdem poker system  
 - Multiplayer real-time gameplay  
 - Club + agent system included  
 - Ready for deployment & customization  
+
 
 ### 🇨🇳 简体中文
 - 完整德州扑克系统  
@@ -47,13 +56,16 @@
 - 内置俱乐部与代理体系  
 - 可直接部署或二次开发  
 
+
 ### 🇹🇼 繁體中文
 - 完整德州撲克系統  
 - 支援多人即時對戰  
 - 內建俱樂部與代理系統  
 - 可部署與客製化  
 
+
 ## ✨ 核心亮点
+
 
 | 特性 | 说明 |
 | :--- | :--- |
@@ -61,7 +73,8 @@
 | 👥 **社交系统** | 俱乐部、联盟、朋友局（私人局）、语音视频聊天 |
 | 🏗️ **成熟代码** | 真实运营2年，刚停服，代码稳定无bug |
 | 📱 **双端支持** | Unity客户端 → iOS + Android |
-| ⚙️ **高性能后端** | C++编写，支持高并发 |
+| ⚙️ **高性能后端** | C++编写，支持并发能力需以公开测试结果验证 |
+
 
 ## 🎯 功能清单
 ✅ 私人局/朋友局 ✅ 俱乐部系统 ✅ 大联盟模式
@@ -71,6 +84,7 @@
 
 
 ## ✨ Key Features 
+
 
 - 🧑‍🤝‍🧑 Multiplayer Poker（多人对战）  
 - 🏆 Club System（俱乐部系统）  
@@ -82,27 +96,35 @@
 
 ## 📂 代码结构
 
+
 ├── gameserver.cpp/h # 游戏服务器主逻辑
+
 
 ├── gameroot.cpp/h # 游戏房间管理
 
+
 ├── onclientmessage.cpp/h # 客户端消息处理
+
 
 ├── onroommessage.cpp/h # 房间消息处理
 
+
 ├── sendclientmessage.cpp/h # 消息发送
+
 
 └── sendroommessage.cpp/h
 
 
-
 ## 🚀 技术栈
+
 
 - **客户端**：Unity (C#) - 支持iOS/Android
 - **服务端**：C++ - 高性能稳定运行
 - **数据库**：MySQL + Redis
 
-## 📦 交付内容
+
+## 📦 资源包
+
 
 - 完整服务端源码 (C++)
 - 完整客户端源码 (Unity)
@@ -110,15 +132,20 @@
 - 部署文档
 - 美术资源包
 
-## 💰 获取完整源码
+
+## 💰 联系
+
 
 📱 **Telegram：@xuzongbin001**  
 📧 **Email：masterai918@gmail.com**
 
-👉 **联系我获取演示视频 **
+
+
+
 
 ## 🎮 Demo | 演示 | 演示
 <img width="500" height="889" alt="animation_edited" src="https://github.com/user-attachments/assets/6de3ed8c-17f8-43a5-94c2-896708a4d798" />
+
 
 See real gameplay below 👇  
 查看游戏实际画面 👇  
@@ -132,24 +159,20 @@ See real gameplay below 👇
 ![微信图片_20241029191842](https://github.com/user-attachments/assets/c7beec6a-2757-484d-9757-87ca12b3bfac)
 ---
 
+
 ⭐ 如果觉得项目有价值，请Star支持一下～
 
 
 ---
 
 
-
 ---
 
+
 ## ✅ 加徽章（信任提升）
+
 
 ```markdown
 ![Stars](https://img.shields.io/github/stars/masterai-top/Texas-game-source-code?style=social)
 ![Last Commit](https://img.shields.io/github/last-commit/masterai-top/Texas-game-source-code)
-
-
-
-
-
-
-
+```
