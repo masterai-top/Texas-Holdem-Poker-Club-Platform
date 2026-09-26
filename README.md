@@ -1,178 +1,60 @@
 [简体中文](README.md) | [繁體中文](README.zh-TW.md) | [English](README.en.md)
 
-# 德州扑克俱乐部、联盟|德州私人局| 德州撲克源碼| 德州源碼
+# 德州扑克俱乐部源码｜德州私人局、联盟与多人实时对战
 
-> **线上稳定运营多年 | 俱乐部+联盟+私人局 | 10+种玩法 | 刚停服，全套源码可售**
-💡 快速搭建属于你的德州扑克平台  
-💡 快速建立自己的德州撲克系統  
+基于 **Unity 客户端 + C++ 服务端 + MySQL + Redis** 的德州扑克俱乐部平台资料。项目包含俱乐部、联盟、私人局/朋友局、邀请、战绩、语音视频、MTT、SNG、AOF、保险与后台管理等已公开功能，适合用于技术评估、部署研究和二次开发。
 
+> 仓库资料展示的是现有产品与代码结构；运营历史、并发能力、支付接入和部署完整性请在使用前独立核验。请遵守所在地法律、平台规则及负责任游戏要求。
 
-🔥 Online Multiplayer System  
-🔥 Club + Agent System  
-🔥 Real-Time Gameplay  
+[![Contact](https://img.shields.io/badge/Contact-TG%3A%40xuzongbin001-blue)](https://t.me/xuzongbin001)
+![Server](https://img.shields.io/badge/Server-C%2B%2B-red)
+![Client](https://img.shields.io/badge/Client-Unity-green)
 
+## 专题导航
 
-👉 🚀 Demo Available  
-👉 📩 Contact for Full Version  
-> **仓库资料包含俱乐部、私人局与联盟功能；运营历史及功能完整性需独立核验**
+- [德州扑克源码：架构、玩法与代码组成](https://masterai-top.github.io/Texas-Holdem-Poker-Club-Platform/zh-cn/texas-holdem-source-code.html)
+- [德州扑克俱乐部源码：俱乐部、联盟与成员体系](https://masterai-top.github.io/Texas-Holdem-Poker-Club-Platform/zh-cn/poker-club-source-code.html)
+- [德州私人局源码：朋友局、邀请与实时牌桌](https://masterai-top.github.io/Texas-Holdem-Poker-Club-Platform/zh-cn/private-poker-game-source-code.html)
+- [繁體中文專題入口](https://masterai-top.github.io/Texas-Holdem-Poker-Club-Platform/zh-tw/texas-holdem-source-code.html)
 
+## 核心功能
 
-[![Contact](https://img.shields.io/badge/联系-TG%3A%40xuzongbin001-blue)](https://t.me/xuzongbin001)
-[![Platform](https://img.shields.io/badge/平台-iOS%20%7C%20Android%20%7C%20H5-green)]()
-[![Payment](https://img.shields.io/badge/支付-USDT%201%3A1-orange)]()
-[![Language](https://img.shields.io/badge/服务端-C%2B%2B-red)]()
+| 模块 | 已公开内容 |
+| --- | --- |
+| 俱乐部与联盟 | 俱乐部、联盟、成员与代理体系 |
+| 私人局 | 私人桌、朋友局、邀请和实时多人牌桌 |
+| 玩法 | 经典德州、6+短牌、奥马哈、大菠萝、MTT、SNG、AOF、德州牛仔 |
+| 对局工具 | 保险、战绩统计、机器人、礼物、实时语音与视频聊天 |
+| 运营 | 后台管理、多语言资源、iOS/Android 客户端 |
 
+## 技术与代码
 
----
+- 客户端：Unity / C#，面向 iOS 与 Android。
+- 服务端：C++，仓库可见游戏服务、活动服务、GM 服务及牌桌逻辑代码。
+- 通信：Protocol Buffers/TARS 相关协议文件。
+- 数据层：README 所述 MySQL + Redis；实际部署配置请以交付资料为准。
+- 多语言：仓库包含简体中文、繁体中文、英文、韩文语言资源。
 
+典型文件包括 `gameserver.cpp/h`、`gameroot.cpp/h`、`onclientmessage.cpp/h`、`onroommessage.cpp/h`、`sendclientmessage.cpp/h` 与 `sendroommessage.cpp/h`。
 
-## ✨ 为什么选择这套源码？
+## 产品截图
 
 
-本项目是**刚刚下架的线上真实项目**，代码经过多年运营验证，绝非Demo。
 
+<img width="500" height="889" alt="德州扑克俱乐部产品演示" src="https://github.com/user-attachments/assets/6de3ed8c-17f8-43a5-94c2-896708a4d798" />
 
-| 核心优势 | 说明 |
-| :--- | :--- |
-| 💰 **1:1 USDT支付** | 完整加密货币支付系统，全球用户可玩 |
-| 🎥 **高端视频房** | 边打牌边视频聊天，真人体验 |
-| 🎮 **9+种玩法** | 德州/6+短牌/奥马哈/大菠萝/MTT/SNG/AOF/德州牛仔 |
-| 👥 **完整社交** | 俱乐部+私人局+朋友局+大联盟模式 |
-| 🎙️ **语音聊天** | 牌桌内实时语音 |
-| 🌍 **多国语言** | 支持多种国家语言，适合出海 |
-| 💎 **真实项目** | 刚刚下架，代码稳定，可直接上线 |
+![德州扑克实际牌桌 03](https://github.com/user-attachments/assets/afc9ea87-44ef-45e6-aa8e-f6491dcb121c)
+![德州扑克实际牌桌 01](https://github.com/user-attachments/assets/20c19859-a23a-4c42-835c-7591f350a125)
+![德州扑克实际牌桌 02](https://github.com/user-attachments/assets/96c4bffd-e012-48a2-a817-2e2453a1a54a)
+![俱乐部产品截图 1](https://github.com/user-attachments/assets/11cee94b-eeea-4519-9727-30e88a737406)
+![俱乐部产品截图 2](https://github.com/user-attachments/assets/160bd558-4327-4ec1-b4a2-0889b5b305be)
+![俱乐部产品截图 3](https://github.com/user-attachments/assets/51b760e9-ddff-4190-b330-cdc2e4cfee93)
+![俱乐部产品截图 4](https://github.com/user-attachments/assets/c1c6955a-172b-4e5b-8fe3-e6325f3f6b38)
+![俱乐部产品截图 5](https://github.com/user-attachments/assets/c7beec6a-2757-484d-9757-87ca12b3bfac)
 
+## 获取与联系
 
-### 🇺🇸 English
-- Complete Texas Holdem poker system  
-- Multiplayer real-time gameplay  
-- Club + agent system included  
-- Ready for deployment & customization  
+- Telegram：[@xuzongbin001](https://t.me/xuzongbin001)
+- Email：masterai918@gmail.com
 
-
-### 🇨🇳 简体中文
-- 完整德州扑克系统  
-- 支持多人实时对战  
-- 内置俱乐部与代理体系  
-- 可直接部署或二次开发  
-
-
-### 🇹🇼 繁體中文
-- 完整德州撲克系統  
-- 支援多人即時對戰  
-- 內建俱樂部與代理系統  
-- 可部署與客製化  
-
-
-## ✨ 核心亮点
-
-
-| 特性 | 说明 |
-| :--- | :--- |
-| 🎮 **10+玩法** | 经典德州、AOF、短牌、奥马哈、大菠萝、MTT、SNG、德州牛仔 |
-| 👥 **社交系统** | 俱乐部、联盟、朋友局（私人局）、语音视频聊天 |
-| 🏗️ **成熟代码** | 真实运营2年，刚停服，代码稳定无bug |
-| 📱 **双端支持** | Unity客户端 → iOS + Android |
-| ⚙️ **高性能后端** | C++编写，支持并发能力需以公开测试结果验证 |
-
-
-## 🎯 功能清单
-✅ 私人局/朋友局 ✅ 俱乐部系统 ✅ 大联盟模式
-✅ 语音视频聊天 ✅ 保险系统 ✅ 战绩统计
-✅ 多桌锦标赛MTT ✅ 坐满即玩SNG ✅ 机器人陪玩
-✅ 实时语音 ✅ 礼物系统 ✅ 后台管理
-
-
-## ✨ Key Features 
-
-
-- 🧑‍🤝‍🧑 Multiplayer Poker（多人对战）  
-- 🏆 Club System（俱乐部系统）  
-- 🧩 Agent System（代理体系）  
-- ⚡ Real-time Gameplay（实时对局）  
-- 🌐 Online Server（在线服务器）  
-- 🔧 Customizable（可二次开发）  
-
-
-## 📂 代码结构
-
-
-├── gameserver.cpp/h # 游戏服务器主逻辑
-
-
-├── gameroot.cpp/h # 游戏房间管理
-
-
-├── onclientmessage.cpp/h # 客户端消息处理
-
-
-├── onroommessage.cpp/h # 房间消息处理
-
-
-├── sendclientmessage.cpp/h # 消息发送
-
-
-└── sendroommessage.cpp/h
-
-
-## 🚀 技术栈
-
-
-- **客户端**：Unity (C#) - 支持iOS/Android
-- **服务端**：C++ - 高性能稳定运行
-- **数据库**：MySQL + Redis
-
-
-## 📦 资源包
-
-
-- 完整服务端源码 (C++)
-- 完整客户端源码 (Unity)
-- 数据库脚本
-- 部署文档
-- 美术资源包
-
-
-## 💰 联系
-
-
-📱 **Telegram：@xuzongbin001**  
-📧 **Email：masterai918@gmail.com**
-
-
-
-
-
-## 🎮 Demo | 演示 | 演示
-<img width="500" height="889" alt="animation_edited" src="https://github.com/user-attachments/assets/6de3ed8c-17f8-43a5-94c2-896708a4d798" />
-
-
-See real gameplay below 👇  
-查看游戏实际画面 👇  
-![03](https://github.com/user-attachments/assets/afc9ea87-44ef-45e6-aa8e-f6491dcb121c)
-![01](https://github.com/user-attachments/assets/20c19859-a23a-4c42-835c-7591f350a125)
-![02](https://github.com/user-attachments/assets/96c4bffd-e012-48a2-a817-2e2453a1a54a)
-![微信图片_20241029191811](https://github.com/user-attachments/assets/11cee94b-eeea-4519-9727-30e88a737406)
-![微信图片_20241029191822](https://github.com/user-attachments/assets/160bd558-4327-4ec1-b4a2-0889b5b305be)
-![微信图片_20241029191829](https://github.com/user-attachments/assets/51b760e9-ddff-4190-b330-cdc2e4cfee93)
-![微信图片_20241029191835](https://github.com/user-attachments/assets/c1c6955a-172b-4e5b-8fe3-e6325f3f6b38)
-![微信图片_20241029191842](https://github.com/user-attachments/assets/c7beec6a-2757-484d-9757-87ca12b3bfac)
----
-
-
-⭐ 如果觉得项目有价值，请Star支持一下～
-
-
----
-
-
----
-
-
-## ✅ 加徽章（信任提升）
-
-
-```markdown
-![Stars](https://img.shields.io/github/stars/masterai-top/Texas-game-source-code?style=social)
-![Last Commit](https://img.shields.io/github/last-commit/masterai-top/Texas-game-source-code)
-```
+本仓库用于项目展示和技术交流。完整源码、数据库脚本、部署文档及资源包的实际范围，请在获取前逐项核验。
