@@ -6,6 +6,8 @@
 
 > 倉庫資料展示現有產品與程式碼結構；營運歷史、併發能力、支付接入與部署完整性請在使用前獨立核驗，並遵守所在地法律及平台規則。
 
+> **沿用線上 README 的專案定位：線上營運專案資料、俱樂部 + 聯盟 + 私人局、10+ 種玩法及完整源碼方案。相關營運與效能描述屬於專案方說明，使用前應獨立核驗。**
+
 ## 專題導覽
 
 - [德州撲克源碼：架構、玩法與程式碼組成](https://masterai-top.github.io/Texas-Holdem-Poker-Club-Platform/zh-tw/texas-holdem-source-code.html)
@@ -23,18 +25,59 @@
 | 對局工具 | 保險、戰績、機器人、禮物、即時語音及視訊聊天 |
 | 技術 | Unity/C# 用戶端、C++ 伺服器、MySQL、Redis、多語言資源 |
 
+## 線上 README 原有亮點
+
+| 原有專案內容 | 線上 README 的功能說明 |
+| --- | --- |
+| 支付 | 1:1 USDT 支付相關系統說明 |
+| 視訊房 | 牌局過程進行視訊聊天 |
+| 多種玩法 | 德州、6+短牌、奧馬哈、大鳳梨、MTT、SNG、AOF、德州牛仔 |
+| 社交系統 | 俱樂部、聯盟、私人局、朋友局、即時語音與禮物 |
+| 對局工具 | 保險、戰績統計、機器人陪玩 |
+| 多語言 | 倉庫中可見簡體、繁體、英文與韓文語言資源 |
+
+## 資源包說明
+
+線上 README 原有清單包括：完整 C++ 伺服器源碼、Unity 用戶端源碼、資料庫腳本、部署文件與美術資源包。實際交付範圍、版本匹配與可部署性需要在取得前逐項核驗。
+
+## 玩法與技術架構
+
+- **德州撲克玩法**：經典德州、6+短牌、奧馬哈、大鳳梨、MTT、SNG、AOF 與德州牛仔。
+- **俱樂部場景**：俱樂部、聯盟、成員/代理體系、朋友局與私人桌邀請。
+- **對局功能**：戰績、保險、禮物、機器人、即時語音及視訊互動。
+- **程式架構**：Unity/C# 用戶端、C++ 伺服器、協定檔與多語言資源；資料層依線上 README 說明為 MySQL + Redis。
+
+倉庫可見 `gameserver.cpp/h`、`gameroot.cpp/h`、`onclientmessage.cpp/h`、`onroommessage.cpp/h` 等遊戲與房間邏輯檔案。實際部署內容應依資料庫、後台與交付文件逐項核驗。
+
 ## 產品截圖
 
+以下全部沿用原線上 README 的真實產品圖片。
+
+### 移動端入口與大廳
+
 <img width="500" height="889" alt="德州撲克俱樂部產品演示" src="https://github.com/user-attachments/assets/6de3ed8c-17f8-43a5-94c2-896708a4d798" />
+
+### 德州牌桌與即時對局
 
 ![德州撲克牌桌 03](https://github.com/user-attachments/assets/afc9ea87-44ef-45e6-aa8e-f6491dcb121c)
 ![德州撲克牌桌 01](https://github.com/user-attachments/assets/20c19859-a23a-4c42-835c-7591f350a125)
 ![德州撲克牌桌 02](https://github.com/user-attachments/assets/96c4bffd-e012-48a2-a817-2e2453a1a54a)
+
+### 俱樂部、朋友局與產品功能
+
 ![俱樂部產品截圖 1](https://github.com/user-attachments/assets/11cee94b-eeea-4519-9727-30e88a737406)
 ![俱樂部產品截圖 2](https://github.com/user-attachments/assets/160bd558-4327-4ec1-b4a2-0889b5b305be)
 ![俱樂部產品截圖 3](https://github.com/user-attachments/assets/51b760e9-ddff-4190-b330-cdc2e4cfee93)
 ![俱樂部產品截圖 4](https://github.com/user-attachments/assets/c1c6955a-172b-4e5b-8fe3-e6325f3f6b38)
 ![俱樂部產品截圖 5](https://github.com/user-attachments/assets/c7beec6a-2757-484d-9757-87ca12b3bfac)
+
+## 多語言搜尋主題
+
+- **德州源碼 / 德州撲克源碼**：用戶端、伺服器、協定與資料層。
+- **德州俱樂部 / 德州撲克俱樂部源碼**：俱樂部、聯盟、成員與代理體系。
+- **德州私人局源碼 / 德州朋友局**：私人桌、朋友局、邀請及多人即時牌桌。
+- **简体中文**：德州源码、德州扑克源码、德州俱乐部源码、德州私人局源码、德州朋友局。
+- **English**：Texas Hold'em source code, poker club source code, private poker game and friend game.
 
 ## 聯絡
 
