@@ -48,7 +48,6 @@ Visible files include game server, room management, client-message and room-mess
 
 ## Product screenshots
 
-All images below are retained from the existing online README. No unverified interface has been added.
 
 ### Mobile entry and lobby
 
